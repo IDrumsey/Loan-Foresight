@@ -13,7 +13,8 @@ import {
   LineElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  Filler
 } from 'chart.js'
 
 ChartJS.register(CategoryScale,
@@ -22,11 +23,12 @@ ChartJS.register(CategoryScale,
   LineElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  Filler
 )
 
 const lineChartOptions = {
-  responsive: false,
+  responsive: true,
   plugins: {
     legend: {
       position: 'top'
@@ -34,7 +36,9 @@ const lineChartOptions = {
     title: {
       display: false
     }
-  }
+  },
+  // https://github.com/reactchartjs/react-chartjs-2/issues/61#issuecomment-633633803
+  maintainAspectRatio: false
 }
 
 
@@ -47,12 +51,11 @@ export default function Home() {
         {
           label: 'Red',
           data: [1, 2, 3],
-          borderColor: 'red'
-        },
-        {
-          label: 'blue',
-          data: [3, 2, 1],
-          borderColor: 'blue'
+          borderColor: '#32a86f',
+          // https://codesandbox.io/s/github/reactchartjs/react-chartjs-2/tree/master/sandboxes/line/area?from-embed=&file=/App.tsx
+          fill: true,
+          // https://www.digitalocean.com/community/tutorials/css-hex-code-colors-alpha-values
+          backgroundColor: '#32a86f14'
         }
       ]
     }
@@ -78,8 +81,8 @@ export default function Home() {
         data && 
 
         // https://youtu.be/Ge6PQkpa6pA
-        <div style={{width: '500px'}}>
-          <Line data={data} options={lineChartOptions}/>
+        <div className={styles.mainWrapper}>
+          <Line data={data} options={lineChartOptions} width={'100%'} style={{marginTop: '50px'}}/>
         </div>
       }
       

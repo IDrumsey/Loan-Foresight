@@ -127,3 +127,15 @@
     filter: invert(1);
   }
 }
+
+
+
+
+/* my styles */
+
+
+.mainWrapper {
+  width: 50%;
+  height: 300px;
+  margin: auto;
+}
