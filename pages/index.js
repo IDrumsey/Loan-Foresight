@@ -31,14 +31,45 @@ const lineChartOptions = {
   responsive: true,
   plugins: {
     legend: {
+      // https://stackoverflow.com/a/38212833/17712310
+      display: false,
       position: 'top'
     },
     title: {
       display: false
-    }
+    },
   },
   // https://github.com/reactchartjs/react-chartjs-2/issues/61#issuecomment-633633803
-  maintainAspectRatio: false
+  maintainAspectRatio: false,
+  layout: {
+    padding: 0
+  },
+  elements: {
+    point: {
+      pointStyle: 'circle',
+      radius: 3,
+      backgroundColor: "#fff",
+      borderColor: "#fff"
+    },
+
+    line: {
+      tension: 0,
+      borderWidth: 3
+    }
+  },
+
+  scales: {
+    x: {
+        ticks: {
+        padding: 10
+      }
+    },
+    y: {
+      ticks: {
+      padding: 10
+    }
+  }
+  }
 }
 
 
@@ -50,7 +81,7 @@ export default function Home() {
       datasets: [
         {
           label: 'Red',
-          data: [1, 2, 3],
+          data: [1, 2, 5],
           borderColor: '#32a86f',
           // https://codesandbox.io/s/github/reactchartjs/react-chartjs-2/tree/master/sandboxes/line/area?from-embed=&file=/App.tsx
           fill: true,
