@@ -2,6 +2,7 @@ import Head from 'next/head'
 import { useEffect, useState } from 'react'
 import styles from '../styles/Home.module.css'
 import { Chart, Line } from 'react-chartjs-2'
+import { SegmentedControl } from '@mantine/core'
 
 // https://codesandbox.io/s/github/reactchartjs/react-chartjs-2/tree/master/sandboxes/line/default?from-embed=&file=/App.tsx
 
@@ -75,6 +76,8 @@ const lineChartOptions = {
 
 export default function Home() {
 
+  const [incomeType, setIncomeType] = useState('hourly')
+
   const getData = () => {
     return {
       labels: ['November', 'December', 'January'],
@@ -108,14 +111,31 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      {
-        data && 
 
-        // https://youtu.be/Ge6PQkpa6pA
-        <div className={styles.mainWrapper}>
+
+      {/* https://youtu.be/Ge6PQkpa6pA */}
+      <div className={styles.mainWrapper}>
+        {
+          data && 
           <Line data={data} options={lineChartOptions} width={'100%'} style={{marginTop: '50px'}}/>
+        }
+
+        <div className="chartParamsInputForm">
+          {/* https://mantine.dev/core/segmented-control/ */}
+          <SegmentedControl
+            value={incomeType}
+            onChange={setIncomeType}
+            data={[
+              {label: 'Hourly', 'value': 'hourly'},
+              {label: 'Salary', 'value': 'salary'}
+            ]}
+          />
+
+          {
+            incomeType == 'hourly' ? <h1>Hourly stuff</h1> : <h1>Salary stuff</h1>
+          }
         </div>
-      }
+      </div>
       
     </div>
   )
