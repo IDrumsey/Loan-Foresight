@@ -2,7 +2,7 @@ import Head from 'next/head'
 import { useEffect, useState } from 'react'
 import styles from '../styles/Home.module.css'
 import { Chart, Line } from 'react-chartjs-2'
-import { SegmentedControl } from '@mantine/core'
+import { SegmentedControl, NumberInput, NativeSelect, TextInput } from '@mantine/core'
 
 // https://codesandbox.io/s/github/reactchartjs/react-chartjs-2/tree/master/sandboxes/line/default?from-embed=&file=/App.tsx
 
@@ -74,9 +74,29 @@ const lineChartOptions = {
 }
 
 
+
+const salaryDefault = 54000
+
+
 export default function Home() {
 
   const [incomeType, setIncomeType] = useState('hourly')
+
+  // https://ui.mantine.dev/category/inputs#currency-input
+  const incomeCurrencySelector = (
+    <NativeSelect
+      data={[
+        {value: 'usd', label: '($) USD'}
+      ]}
+      styles={{
+        input: {
+          fontWeight: 500,
+          borderTopLeftRadius: 0,
+          borderBottomLeftRadius: 0
+        }
+      }}
+    />
+  )
 
   const getData = () => {
     return {
@@ -129,10 +149,34 @@ export default function Home() {
               {label: 'Hourly', 'value': 'hourly'},
               {label: 'Salary', 'value': 'salary'}
             ]}
+            sx={{
+              marginBottom: 25
+            }}
           />
 
           {
-            incomeType == 'hourly' ? <h1>Hourly stuff</h1> : <h1>Salary stuff</h1>
+            incomeType == 'hourly' ?
+            
+            <div className="hourlyForm">
+              hourly
+            </div>
+
+            :
+
+            <div className="salaryForm">
+              {/* https://ui.mantine.dev/category/inputs#currency-input */}
+              <TextInput
+                type='number'
+                placeholder={salaryDefault}
+                label='Current Salary'
+                rightSection={incomeCurrencySelector}
+                rightSectionWidth={92}
+                sx={{
+                  width: '60%'
+                }}
+                styles={{ label: {marginBottom: 10}}}
+              />
+            </div>
           }
         </div>
       </div>
