@@ -2,7 +2,7 @@ import Head from 'next/head'
 import { useEffect, useState } from 'react'
 import styles from '../styles/Home.module.css'
 import { Chart, Line } from 'react-chartjs-2'
-import { SegmentedControl, NumberInput, NativeSelect, TextInput } from '@mantine/core'
+import { SegmentedControl, NativeSelect, TextInput, Slider, Space, Text } from '@mantine/core'
 
 // https://codesandbox.io/s/github/reactchartjs/react-chartjs-2/tree/master/sandboxes/line/default?from-embed=&file=/App.tsx
 
@@ -76,11 +76,14 @@ const lineChartOptions = {
 
 
 const salaryDefault = 54000
+const minSalaryChange = -10
+const maxSalaryChange = 30
 
 
 export default function Home() {
 
   const [incomeType, setIncomeType] = useState('hourly')
+  const [expectedIncomeChange, setExpectedIncomeChange] = useState(3)
 
   // https://ui.mantine.dev/category/inputs#currency-input
   const incomeCurrencySelector = (
@@ -175,6 +178,27 @@ export default function Home() {
                   width: '60%'
                 }}
                 styles={{ label: {marginBottom: 10}}}
+              />
+              
+              <Space h="xl"/>
+              
+              <Text size="sm" weight={500} style={{marginBottom: 10}}>Expected Average Annual Salary Change</Text>
+              <Slider
+                value={expectedIncomeChange}
+                onChange={setExpectedIncomeChange}
+                styles={{
+                  track: {
+                    bar: "#fff"
+                  }
+                }}
+                min={-10}
+                max={25}
+                marks={[
+                  {value: minSalaryChange, label: `${minSalaryChange.toString()}%`},
+                  {value: 0, label: '0%'},
+                  {value: maxSalaryChange, label: `${maxSalaryChange.toString()}%`}
+                ]}
+                label={value => `${value}%`}
               />
             </div>
           }
