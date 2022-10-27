@@ -2,7 +2,7 @@ import Head from 'next/head'
 import { useEffect, useState } from 'react'
 import styles from '../styles/Home.module.css'
 import { Chart, Line } from 'react-chartjs-2'
-import { SegmentedControl, NativeSelect, TextInput, Slider, Space, Text } from '@mantine/core'
+import { SegmentedControl, NativeSelect, TextInput, Slider, Space, Text, Divider } from '@mantine/core'
 
 // https://codesandbox.io/s/github/reactchartjs/react-chartjs-2/tree/master/sandboxes/line/default?from-embed=&file=/App.tsx
 
@@ -140,10 +140,16 @@ export default function Home() {
       <div className={styles.mainWrapper}>
         {
           data && 
-          <Line data={data} options={lineChartOptions} width={'100%'} style={{marginTop: '50px', marginBottom: '25px'}}/>
+
+          <div className={styles.graphWrapper}>
+            <Line data={data} options={lineChartOptions}/>
+          </div>
         }
 
         <div className="chartParamsInputForm">
+          <Text size="xl" weight="bold" style={{marginBottom: 10, color: "#86ad9b"}}>Income</Text>
+          <Divider size="sm" style={{marginBottom: 25}}/>
+
           {/* https://mantine.dev/core/segmented-control/ */}
           <SegmentedControl
             value={incomeType}
@@ -153,7 +159,7 @@ export default function Home() {
               {label: 'Salary', 'value': 'salary'}
             ]}
             sx={{
-              marginBottom: 25
+              marginBottom: 10
             }}
           />
 
@@ -191,6 +197,9 @@ export default function Home() {
                     bar: "#fff"
                   }
                 }}
+                sx={{
+                  marginBottom: 50
+                }}
                 min={-10}
                 max={25}
                 marks={[
@@ -202,9 +211,11 @@ export default function Home() {
               />
             </div>
           }
+
+          <Text size="xl" weight="bold" style={{marginBottom: 10, color: "#b08991"}}>Expenses</Text>
+          <Divider size="sm" style={{marginBottom: 25}}/>
         </div>
       </div>
-      
     </div>
   )
 }

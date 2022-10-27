@@ -136,6 +136,11 @@
 
 .mainWrapper {
   width: 50%;
-  height: 300px;
   margin: auto;
+  padding: 50px 0;
+}
+
+.graphWrapper {
+  height: 200px;
+  margin-bottom: 25px;
 }
