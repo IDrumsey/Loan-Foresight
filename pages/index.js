@@ -137,7 +137,7 @@ export default function Home() {
       <div className={styles.mainWrapper}>
         {
           data && 
-          <Line data={data} options={lineChartOptions} width={'100%'} style={{marginTop: '50px'}}/>
+          <Line data={data} options={lineChartOptions} width={'100%'} style={{marginTop: '50px', marginBottom: '25px'}}/>
         }
 
         <div className="chartParamsInputForm">
