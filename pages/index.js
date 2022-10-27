@@ -189,6 +189,7 @@ export default function Home() {
               <Space h="xl"/>
               
               <Text size="sm" weight={500} style={{marginBottom: 10}}>Expected Average Annual Salary Change</Text>
+              {/* https://mantine.dev/core/slider/ */}
               <Slider
                 value={expectedIncomeChange}
                 onChange={setExpectedIncomeChange}
