@@ -88,6 +88,7 @@ export default function Home() {
   const [expectedIncomeChange, setExpectedIncomeChange] = useState(3)
   const [graphConfigDrawerOpen, setGraphConfigDrawerOpen] = useState(false)
   const [numMonthsProjected, setNumMonthsProjected] = useState(12)
+  const [numYearsProjected, setNumYearsProjected] = useState(1)
 
   // https://ui.mantine.dev/category/inputs#currency-input
   const incomeCurrencySelector = (
@@ -126,6 +127,18 @@ export default function Home() {
 
 
 
+  const onProjectedMonthsChange = numMonths => {
+    setNumMonthsProjected(numMonths)
+    setNumYearsProjected(numMonths / 12)
+  }
+
+  const onProjectedYearsChange = numYears => {
+    setNumYearsProjected(numYears)
+    setNumMonthsProjected(numYears * 12)
+  }
+
+
+
   useEffect(() => {
     setData(getData())
   }, [])
@@ -160,15 +173,34 @@ export default function Home() {
       >
         <Divider size="xs" style={{marginBottom: 40}}/>
         {/* https://mantine.dev/core/slider/ */}
+        <Text size="sm" weight={500} style={{marginBottom: 10}}>Months in the future</Text>
         <Slider
           value={numMonthsProjected}
-          onChange={setNumMonthsProjected}
+          onChange={onProjectedMonthsChange}
           marks={[
             {value: 0, label: '0'},
             {value: 100, label: '100'}
           ]}
           min={0}
           max={100}
+          sx={{
+            marginBottom: 35
+          }}
+        />
+
+        <Text size="sm" weight={500} style={{marginBottom: 10}}>Years in the future</Text>
+        <Slider
+          value={numYearsProjected}
+          onChange={onProjectedYearsChange}
+          marks={[
+            {value: 0, label: '0'},
+            {value: 75, label: '75'}
+          ]}
+          min={0}
+          max={75}
+          sx={{
+            marginBottom: 35
+          }}
         />
       </Drawer>
 
