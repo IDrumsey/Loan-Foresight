@@ -136,8 +136,8 @@
 
 .mainWrapper {
   width: 50%;
-  margin: auto;
   padding: 50px 0;
+  transition: margin-left 225ms linear;
 }
 
 .graphWrapper {

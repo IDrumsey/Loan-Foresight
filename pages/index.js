@@ -2,7 +2,8 @@ import Head from 'next/head'
 import { useEffect, useState } from 'react'
 import styles from '../styles/Home.module.css'
 import { Chart, Line } from 'react-chartjs-2'
-import { SegmentedControl, NativeSelect, TextInput, Slider, Space, Text, Divider } from '@mantine/core'
+import { SegmentedControl, NativeSelect, TextInput, Slider, Space, Text, Divider, Drawer, Button } from '@mantine/core'
+import { GoSettings } from 'react-icons/go'
 
 // https://codesandbox.io/s/github/reactchartjs/react-chartjs-2/tree/master/sandboxes/line/default?from-embed=&file=/App.tsx
 
@@ -78,12 +79,14 @@ const lineChartOptions = {
 const salaryDefault = 54000
 const minSalaryChange = -10
 const maxSalaryChange = 30
+const mainWrapperWidth = 450
 
 
 export default function Home() {
 
   const [incomeType, setIncomeType] = useState('hourly')
   const [expectedIncomeChange, setExpectedIncomeChange] = useState(3)
+  const [graphConfigDrawerOpen, setGraphConfigDrawerOpen] = useState(false)
 
   // https://ui.mantine.dev/category/inputs#currency-input
   const incomeCurrencySelector = (
@@ -135,9 +138,36 @@ export default function Home() {
       </Head>
 
 
+      <Button style={{position: 'absolute', top: 25, right: 25}} variant="transparent" size="xl" color="gray"
+        onClick={() => setGraphConfigDrawerOpen(!graphConfigDrawerOpen)}
+      >
+        <GoSettings/>
+      </Button>
+
+
+      <Drawer
+        opened={graphConfigDrawerOpen}
+        onClose={() => setGraphConfigDrawerOpen(false)}
+        title={
+          <Text size="lg" weight="bold">Graph Configuration</Text>
+        }
+        position="right"
+        transitionDuration={225}
+        padding={15}
+        overlayBlur={0}
+        overlayOpacity={.5}
+      ></Drawer>
+
+
 
       {/* https://youtu.be/Ge6PQkpa6pA */}
-      <div className={styles.mainWrapper}>
+      <div className={styles.mainWrapper} style={{
+        width: `${mainWrapperWidth}px`,
+        // https://stackoverflow.com/a/30587944/17712310
+        marginLeft: graphConfigDrawerOpen ? '5%' : `calc(50% - ${mainWrapperWidth/2}px)`,
+        marginRight: 'auto'
+      }}>
+
         {
           data && 
 
