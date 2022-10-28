@@ -87,6 +87,7 @@ export default function Home() {
   const [incomeType, setIncomeType] = useState('hourly')
   const [expectedIncomeChange, setExpectedIncomeChange] = useState(3)
   const [graphConfigDrawerOpen, setGraphConfigDrawerOpen] = useState(false)
+  const [numMonthsProjected, setNumMonthsProjected] = useState(12)
 
   // https://ui.mantine.dev/category/inputs#currency-input
   const incomeCurrencySelector = (
@@ -153,10 +154,23 @@ export default function Home() {
         }
         position="right"
         transitionDuration={225}
-        padding={15}
+        padding={25}
         overlayBlur={0}
         overlayOpacity={.5}
-      ></Drawer>
+      >
+        <Divider size="xs" style={{marginBottom: 40}}/>
+        {/* https://mantine.dev/core/slider/ */}
+        <Slider
+          value={numMonthsProjected}
+          onChange={setNumMonthsProjected}
+          marks={[
+            {value: 0, label: '0'},
+            {value: 100, label: '100'}
+          ]}
+          min={0}
+          max={100}
+        />
+      </Drawer>
 
 
 
