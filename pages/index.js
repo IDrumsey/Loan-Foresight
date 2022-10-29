@@ -4,6 +4,7 @@ import styles from '../styles/Home.module.css'
 import { Chart, Line } from 'react-chartjs-2'
 import { SegmentedControl, NativeSelect, TextInput, Slider, Space, Text, Divider, Drawer, Button } from '@mantine/core'
 import { GoSettings } from 'react-icons/go'
+import {calcProjectedNets} from '../finance-planner'
 
 // https://codesandbox.io/s/github/reactchartjs/react-chartjs-2/tree/master/sandboxes/line/default?from-embed=&file=/App.tsx
 
@@ -78,7 +79,7 @@ const lineChartOptions = {
 
 const salaryDefault = 54000
 const minSalaryChange = -10
-const maxSalaryChange = 30
+const maxSalaryChange = 100
 const mainWrapperWidth = 450
 
 
@@ -87,8 +88,9 @@ export default function Home() {
   const [incomeType, setIncomeType] = useState('hourly')
   const [expectedIncomeChange, setExpectedIncomeChange] = useState(3)
   const [graphConfigDrawerOpen, setGraphConfigDrawerOpen] = useState(false)
-  const [numMonthsProjected, setNumMonthsProjected] = useState(12)
+  const [numMonthsProjected, setNumMonthsProjected] = useState(50)
   const [numYearsProjected, setNumYearsProjected] = useState(1)
+  const [lastAdjProjectedTimeFrame, setLastAdjProjectedTimeFrame] = useState('months')
 
   // https://ui.mantine.dev/category/inputs#currency-input
   const incomeCurrencySelector = (
@@ -107,12 +109,18 @@ export default function Home() {
   )
 
   const getData = () => {
+
+    const expectedNets = calcProjectedNets(0, 48000, expectedIncomeChange / 100, numMonthsProjected, lastAdjProjectedTimeFrame)
+
     return {
-      labels: ['November', 'December', 'January'],
+      // https://stackoverflow.com/a/1643468/17712310
+      // https://stackoverflow.com/a/18648314/17712310
+      // https://www.freecodecamp.org/news/how-to-format-dates-in-javascript/#:~:text=You%20can%20also%20decide%20not%20to%20use%20either
+      labels: expectedNets.map(net => new Date(net.date).toLocaleDateString()),
       datasets: [
         {
           label: 'Red',
-          data: [1, 2, 5],
+          data: expectedNets.map(net => net.expected),
           borderColor: '#32a86f',
           // https://codesandbox.io/s/github/reactchartjs/react-chartjs-2/tree/master/sandboxes/line/area?from-embed=&file=/App.tsx
           fill: true,
@@ -128,11 +136,13 @@ export default function Home() {
 
 
   const onProjectedMonthsChange = numMonths => {
+    setLastAdjProjectedTimeFrame('months')
     setNumMonthsProjected(numMonths)
     setNumYearsProjected(numMonths / 12)
   }
 
   const onProjectedYearsChange = numYears => {
+    setLastAdjProjectedTimeFrame('years')
     setNumYearsProjected(numYears)
     setNumMonthsProjected(numYears * 12)
   }
@@ -142,6 +152,17 @@ export default function Home() {
   useEffect(() => {
     setData(getData())
   }, [])
+
+
+  // https://bobbyhadz.com/blog/react-listen-to-state-change#:~:text=Use%20the%20useEffect%20hook%20to,time%20the%20state%20variables%20change.
+  useEffect(() => {
+    onDataChange()
+  }, [expectedIncomeChange, numMonthsProjected, numYearsProjected])
+
+
+  const onDataChange = () => {
+    setData(getData())
+  }
   
   return (
     <div className={styles.container}>
@@ -278,7 +299,7 @@ export default function Home() {
                   marginBottom: 50
                 }}
                 min={-10}
-                max={25}
+                max={maxSalaryChange}
                 marks={[
                   {value: minSalaryChange, label: `${minSalaryChange.toString()}%`},
                   {value: 0, label: '0%'},
