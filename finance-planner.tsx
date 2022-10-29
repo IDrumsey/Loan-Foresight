@@ -17,7 +17,14 @@ export const calcProjectedNets = (baseNet: number, annualSalary: number, expecte
         maxTimeIncrementNum = numMonthsToProject / 12
     }
 
+
     let expectedNetWorth = []
+
+    // push current data as a node
+    expectedNetWorth.push({
+        date: new Date(),
+        expected: baseNet
+    })
 
     let currWorth = baseNet || 0
     let expectedSalary = annualSalary
