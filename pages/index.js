@@ -92,6 +92,7 @@ export default function Home() {
   const [numYearsProjected, setNumYearsProjected] = useState(1)
   const [graphIntervalTimeFrame, setGraphIntervalTimeFrame] = useState('months')
   const [salary, setSalary] = useState(salaryDefault.toString())
+  const [currNetWorth, setCurrNetWorth] = useState(0)
 
   // https://ui.mantine.dev/category/inputs#currency-input
   const incomeCurrencySelector = (
@@ -112,7 +113,7 @@ export default function Home() {
   const getData = () => {
 
     // https://dev.to/sanchithasr/7-ways-to-convert-a-string-to-number-in-javascript-4l
-    const expectedNets = calcProjectedNets(0, parseInt(salary), expectedIncomeChange / 100, numMonthsProjected, graphIntervalTimeFrame)
+    const expectedNets = calcProjectedNets(parseInt(currNetWorth), parseInt(salary), expectedIncomeChange / 100, numMonthsProjected, graphIntervalTimeFrame)
 
     // console.log(expectedNets)
 
@@ -271,6 +272,23 @@ export default function Home() {
             }}
           />
 
+          <TextInput
+              type='number'
+              value={currNetWorth}
+              label='Current net worth'
+              onChange={(event) => setCurrNetWorth(event.currentTarget.value)}
+              sx={{
+                width: '30%'
+              }}
+              styles={{ label: {marginBottom: 10}}}
+              style={{
+                marginBottom: 25
+              }}
+              onBlur={() => {
+                onDataChange()
+              }}
+            />
+
           {
             incomeType == 'hourly' ?
             
@@ -281,6 +299,7 @@ export default function Home() {
             :
 
             <div className="salaryForm">
+
               {/* https://ui.mantine.dev/category/inputs#currency-input */}
               {/* https://mantine.dev/core/text-input/#controlled */}
               <TextInput
