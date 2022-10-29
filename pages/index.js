@@ -88,7 +88,7 @@ export default function Home() {
   const [incomeType, setIncomeType] = useState('hourly')
   const [expectedIncomeChange, setExpectedIncomeChange] = useState(3)
   const [graphConfigDrawerOpen, setGraphConfigDrawerOpen] = useState(false)
-  const [numMonthsProjected, setNumMonthsProjected] = useState(50)
+  const [numMonthsProjected, setNumMonthsProjected] = useState(12)
   const [numYearsProjected, setNumYearsProjected] = useState(1)
   const [graphIntervalTimeFrame, setGraphIntervalTimeFrame] = useState('months')
   const [salary, setSalary] = useState(salaryDefault.toString())
