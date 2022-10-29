@@ -41,13 +41,15 @@ export const calcProjectedNets = (baseNet: number, annualSalary: number, expecte
         
         currWorth = currWorth += granularity == 'years' ? expectedSalary : expectedSalary / 12
 
-        
         expectedNetWorth.push({
             date: nodeDate,
             expected: currWorth
         })
 
-        expectedSalary += expectedSalary * expectedAnnualSalaryIncrease
+        if(granularity == 'years' || (granularity == 'months' && i % 12 == 0)){
+            let amountToIncreaseSalaryBy = expectedSalary * expectedAnnualSalaryIncrease
+            expectedSalary += amountToIncreaseSalaryBy
+        }
     }
 
     return expectedNetWorth

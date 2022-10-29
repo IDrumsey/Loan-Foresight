@@ -90,8 +90,8 @@ export default function Home() {
   const [graphConfigDrawerOpen, setGraphConfigDrawerOpen] = useState(false)
   const [numMonthsProjected, setNumMonthsProjected] = useState(50)
   const [numYearsProjected, setNumYearsProjected] = useState(1)
-  const [lastAdjProjectedTimeFrame, setLastAdjProjectedTimeFrame] = useState('months')
   const [graphIntervalTimeFrame, setGraphIntervalTimeFrame] = useState('months')
+  const [salary, setSalary] = useState(salaryDefault.toString())
 
   // https://ui.mantine.dev/category/inputs#currency-input
   const incomeCurrencySelector = (
@@ -111,7 +111,10 @@ export default function Home() {
 
   const getData = () => {
 
-    const expectedNets = calcProjectedNets(0, 48000, expectedIncomeChange / 100, numMonthsProjected, graphIntervalTimeFrame)
+    // https://dev.to/sanchithasr/7-ways-to-convert-a-string-to-number-in-javascript-4l
+    const expectedNets = calcProjectedNets(0, parseInt(salary), expectedIncomeChange / 100, numMonthsProjected, graphIntervalTimeFrame)
+
+    // console.log(expectedNets)
 
     return {
       // https://stackoverflow.com/a/1643468/17712310
@@ -133,22 +136,6 @@ export default function Home() {
   }
 
   const [data, setData] = useState()
-
-
-
-  const onProjectedMonthsChange = numMonths => {
-    setLastAdjProjectedTimeFrame('months')
-    setGraphIntervalTimeFrame('months')
-    setNumMonthsProjected(numMonths)
-    setNumYearsProjected(numMonths / 12)
-  }
-
-  const onProjectedYearsChange = numYears => {
-    setLastAdjProjectedTimeFrame('years')
-    setGraphIntervalTimeFrame('years')
-    setNumYearsProjected(numYears)
-    setNumMonthsProjected(numYears * 12)
-  }
 
 
 
@@ -177,6 +164,7 @@ export default function Home() {
 
 
       <Button style={{position: 'absolute', top: 25, right: 25}} variant="transparent" size="xl" color="gray"
+        // https://stackoverflow.com/a/59304431/17712310
         onClick={() => setGraphConfigDrawerOpen(!graphConfigDrawerOpen)}
       >
         <GoSettings/>
@@ -214,7 +202,10 @@ export default function Home() {
         <Text size="sm" weight={500} style={{marginBottom: 10}}>Months in the future</Text>
         <Slider
           value={numMonthsProjected}
-          onChange={onProjectedMonthsChange}
+          onChange={(newNum) => {
+            setNumMonthsProjected(newNum)
+            setNumYearsProjected(newNum / 12)
+          }}
           marks={[
             {value: 0, label: '0'},
             {value: 100, label: '100'}
@@ -229,7 +220,10 @@ export default function Home() {
         <Text size="sm" weight={500} style={{marginBottom: 10}}>Years in the future</Text>
         <Slider
           value={numYearsProjected}
-          onChange={onProjectedYearsChange}
+          onChange={(newNum) => {
+            setNumYearsProjected(newNum)
+            setNumMonthsProjected(newNum * 12)
+          }}
           marks={[
             {value: 0, label: '0'},
             {value: 75, label: '75'}
@@ -288,16 +282,21 @@ export default function Home() {
 
             <div className="salaryForm">
               {/* https://ui.mantine.dev/category/inputs#currency-input */}
+              {/* https://mantine.dev/core/text-input/#controlled */}
               <TextInput
                 type='number'
-                placeholder={salaryDefault}
+                value={salary}
                 label='Current Salary'
+                onChange={(event) => setSalary(event.currentTarget.value)}
                 rightSection={incomeCurrencySelector}
                 rightSectionWidth={92}
                 sx={{
                   width: '60%'
                 }}
                 styles={{ label: {marginBottom: 10}}}
+                onBlur={() => {
+                  onDataChange()
+                }}
               />
               
               <Space h="xl"/>
