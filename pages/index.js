@@ -2,7 +2,7 @@ import Head from 'next/head'
 import { useEffect, useState } from 'react'
 import styles from '../styles/Home.module.css'
 import { Chart, Line } from 'react-chartjs-2'
-import { SegmentedControl, NativeSelect, TextInput, Slider, Space, Text, Divider, Drawer, Button } from '@mantine/core'
+import { SegmentedControl, NativeSelect, TextInput, Slider, Space, Text, Divider, Drawer, Button, Radio } from '@mantine/core'
 import { GoSettings } from 'react-icons/go'
 import {calcProjectedNets} from '../finance-planner'
 
@@ -91,6 +91,7 @@ export default function Home() {
   const [numMonthsProjected, setNumMonthsProjected] = useState(50)
   const [numYearsProjected, setNumYearsProjected] = useState(1)
   const [lastAdjProjectedTimeFrame, setLastAdjProjectedTimeFrame] = useState('months')
+  const [graphIntervalTimeFrame, setGraphIntervalTimeFrame] = useState('months')
 
   // https://ui.mantine.dev/category/inputs#currency-input
   const incomeCurrencySelector = (
@@ -110,7 +111,7 @@ export default function Home() {
 
   const getData = () => {
 
-    const expectedNets = calcProjectedNets(0, 48000, expectedIncomeChange / 100, numMonthsProjected, lastAdjProjectedTimeFrame)
+    const expectedNets = calcProjectedNets(0, 48000, expectedIncomeChange / 100, numMonthsProjected, graphIntervalTimeFrame)
 
     return {
       // https://stackoverflow.com/a/1643468/17712310
@@ -137,12 +138,14 @@ export default function Home() {
 
   const onProjectedMonthsChange = numMonths => {
     setLastAdjProjectedTimeFrame('months')
+    setGraphIntervalTimeFrame('months')
     setNumMonthsProjected(numMonths)
     setNumYearsProjected(numMonths / 12)
   }
 
   const onProjectedYearsChange = numYears => {
     setLastAdjProjectedTimeFrame('years')
+    setGraphIntervalTimeFrame('years')
     setNumYearsProjected(numYears)
     setNumMonthsProjected(numYears * 12)
   }
@@ -157,7 +160,7 @@ export default function Home() {
   // https://bobbyhadz.com/blog/react-listen-to-state-change#:~:text=Use%20the%20useEffect%20hook%20to,time%20the%20state%20variables%20change.
   useEffect(() => {
     onDataChange()
-  }, [expectedIncomeChange, numMonthsProjected, numYearsProjected])
+  }, [expectedIncomeChange, numMonthsProjected, numYearsProjected, graphIntervalTimeFrame])
 
 
   const onDataChange = () => {
@@ -193,6 +196,20 @@ export default function Home() {
         overlayOpacity={.5}
       >
         <Divider size="xs" style={{marginBottom: 40}}/>
+
+        {/* https://mantine.dev/core/checkbox/#controlled-checkboxgroup */}
+        <Radio.Group
+          value={graphIntervalTimeFrame}
+          onChange={setGraphIntervalTimeFrame}
+          sx={{
+            marginBottom: 10
+          }}
+          size="sm"
+        >
+          <Radio value="months" label="months" styles={{radio: {cursor: 'pointer'}}} transitionDuration={250}/>
+          <Radio value="years" label="years" styles={{radio: {cursor: 'pointer'}}} transitionDuration={250}/>
+        </Radio.Group>
+
         {/* https://mantine.dev/core/slider/ */}
         <Text size="sm" weight={500} style={{marginBottom: 10}}>Months in the future</Text>
         <Slider
