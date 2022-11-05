@@ -6,7 +6,7 @@ const expenseTypeSelector = (
 <NativeSelect
     data={[
     {value: 'absolute', label: '$'},
-    {value: 'relative', label: '%'}
+    {value: 'relative', label: '%', disabled: true}
     ]}
     styles={{
     input: {
