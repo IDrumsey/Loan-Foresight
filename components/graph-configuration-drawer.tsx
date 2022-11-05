@@ -12,7 +12,9 @@ export default ({
     showingIncome,
     showingIncomeSetter,
     showingExpenses,
-    showingExpensesSetter
+    showingExpensesSetter,
+    combineIncomeAndExpenses,
+    combineIncomeAndExpensesSetter
 }) => {
 
     return (
@@ -35,7 +37,7 @@ export default ({
 
                 <Group
                     sx={{
-                        marginBottom: 50
+                        marginBottom: 25
                     }}
                 >
                     {/* https://mantine.dev/core/checkbox/#controlled */}
@@ -56,6 +58,23 @@ export default ({
                         labelPosition="right"
                     />
                 </Group>
+
+
+                {
+                    showingIncome && showingExpenses &&
+
+                    <Checkbox
+                        sx={{
+                            marginBottom: 50
+                        }}
+                        checked={combineIncomeAndExpenses}
+                        onChange={e => combineIncomeAndExpensesSetter(e.target.checked)}
+                        value="net worth"
+                        label="Combine income and expenses"
+                        color="blue"
+                        labelPosition="right"
+                    />
+                }
 
                 <h4 style={{marginBottom: 5}}>In</h4>
 

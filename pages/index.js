@@ -106,6 +106,7 @@ export default function Home() {
 
   const [showIncomeGraph, showIncomeGraphSetter] = useState(true)
   const [showExpensesGraph, showExpensesGraphSetter] = useState(false)
+  const [combineIncomeAndExpenses, combineIncomeAndExpensesSetter] = useState(false)
 
   const generateIncomeDataset = () => {
 
@@ -157,7 +158,7 @@ export default function Home() {
   // https://bobbyhadz.com/blog/react-listen-to-state-change#:~:text=Use%20the%20useEffect%20hook%20to,time%20the%20state%20variables%20change.
   useEffect(() => {
     triggerGraphChange()
-  }, [expectedIncomeChange, numMonthsProjected, numYearsProjected, graphIntervalTimeFrame, showIncomeGraph, showExpensesGraph])
+  }, [expectedIncomeChange, numMonthsProjected, numYearsProjected, graphIntervalTimeFrame, showIncomeGraph, showExpensesGraph, combineIncomeAndExpenses])
 
 
   const triggerGraphChange = () => {
@@ -166,14 +167,35 @@ export default function Home() {
 
     let datasetsToShow = []
 
-    if(showIncomeGraph) {
+    // XOR - https://stackoverflow.com/a/4540443
+    let ignoreCombine = (!showIncomeGraph != !showExpensesGraph) || (!showIncomeGraph && !showExpensesGraph)
+
+    if(showIncomeGraph && (ignoreCombine || !combineIncomeAndExpenses)) {
       const incomeDataset = generateIncomeDataset()
       datasetsToShow.push(incomeDataset)
     }
 
-    if(showExpensesGraph) {
+    if(showExpensesGraph && (ignoreCombine || !combineIncomeAndExpenses)) {
       const expenseDataset = generateExpensesDataset()
       datasetsToShow.push(expenseDataset)
+    }
+
+    if(combineIncomeAndExpenses && !ignoreCombine) {
+      const incomeDataset = generateIncomeDataset()
+      const expenseDataset = generateExpensesDataset()
+
+      let combinedDataset = {
+        label: 'Red',
+        // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map
+        data: incomeDataset.data.map((income, i) => income - expenseDataset.data[i]),
+        borderColor: '#eb8c34',
+        // https://codesandbox.io/s/github/reactchartjs/react-chartjs-2/tree/master/sandboxes/line/area?from-embed=&file=/App.tsx
+        fill: true,
+        // https://www.digitalocean.com/community/tutorials/css-hex-code-colors-alpha-values
+        backgroundColor: '#eb8c3414'
+      }
+
+      datasetsToShow = [combinedDataset]
     }
 
     const data = {
@@ -217,6 +239,8 @@ export default function Home() {
         showingIncomeSetter={showIncomeGraphSetter}
         showingExpenses={showExpensesGraph}
         showingExpensesSetter={showExpensesGraphSetter}
+        combineIncomeAndExpenses={combineIncomeAndExpenses}
+        combineIncomeAndExpensesSetter={combineIncomeAndExpensesSetter}
       />
 
 
