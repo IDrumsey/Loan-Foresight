@@ -56,7 +56,7 @@ export const generateDates = (xAxisGranularity: 'months' | 'years', xAxisMax: Nu
     let dates: Date[] = [prevDate]
 
     for(let i = 0; i < xAxisMax; i++) {
-        let dateInstance = new Date()
+        let dateInstance = new Date(prevDate)
 
         // add time
         switch(xAxisGranularity) {
