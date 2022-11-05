@@ -22,7 +22,6 @@ export const calcProjectedNets = (baseNet: number, annualSalary: number, expecte
 
     // push current data as a node
     expectedNetWorth.push({
-        date: new Date(),
         expected: baseNet
     })
 
@@ -31,25 +30,10 @@ export const calcProjectedNets = (baseNet: number, annualSalary: number, expecte
 
     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Loops_and_iteration
     for(let i = 1; i <= maxTimeIncrementNum; i++) {
-        let nodeDate = new Date()
-
-        // add time
-        switch(granularity) {
-            case 'years': {
-                // https://codingbeautydev.com/blog/javascript-add-years-to-date/
-                nodeDate.setFullYear(nodeDate.getFullYear() + i)
-                break
-            }
-            case 'months': {
-                nodeDate.setMonth(nodeDate.getMonth() + i)
-                break
-            }
-        }
         
         currWorth = currWorth += granularity == 'years' ? expectedSalary : expectedSalary / 12
 
         expectedNetWorth.push({
-            date: nodeDate,
             expected: currWorth
         })
 
@@ -60,4 +44,36 @@ export const calcProjectedNets = (baseNet: number, annualSalary: number, expecte
     }
 
     return expectedNetWorth
+}
+
+
+
+
+
+export const generateDates = (xAxisGranularity: 'months' | 'years', xAxisMax: Number) => {
+    let prevDate = new Date()
+
+    let dates: Date[] = [prevDate]
+
+    for(let i = 0; i < xAxisMax; i++) {
+        let dateInstance = new Date()
+
+        // add time
+        switch(xAxisGranularity) {
+            case 'years': {
+                // https://codingbeautydev.com/blog/javascript-add-years-to-date/
+                dateInstance.setFullYear(prevDate.getFullYear() + 1)
+                break
+            }
+            case 'months': {
+                dateInstance.setMonth(prevDate.getMonth() + 1)
+                break
+            }
+        }
+
+        dates.push(dateInstance)
+        prevDate = dateInstance
+    }
+
+    return dates
 }

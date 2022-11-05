@@ -1,4 +1,4 @@
-import {Drawer, Text, Divider, Radio, Slider} from '@mantine/core'
+import {Drawer, Text, Divider, Radio, Slider, Group, Checkbox} from '@mantine/core'
 
 export default ({
     isOpen,
@@ -8,7 +8,11 @@ export default ({
     numMonthsProjected,
     numMonthsProjectedSetter,
     numYearsProjected,
-    numYearsProjectedSetter
+    numYearsProjectedSetter,
+    showingIncome,
+    showingIncomeSetter,
+    showingExpenses,
+    showingExpensesSetter
 }) => {
 
     return (
@@ -27,6 +31,34 @@ export default ({
             >
                 <Divider size="xs" style={{marginBottom: 40}}/>
 
+                <h4 style={{marginBottom: 15}}>Show</h4>
+
+                <Group
+                    sx={{
+                        marginBottom: 50
+                    }}
+                >
+                    {/* https://mantine.dev/core/checkbox/#controlled */}
+                    <Checkbox
+                        checked={showingIncome}
+                        onChange={e => showingIncomeSetter(e.target.checked)}
+                        value="income"
+                        label="Income"
+                        color="blue"
+                        labelPosition="right"
+                    />
+                    <Checkbox
+                        checked={showingExpenses}
+                        onChange={e => showingExpensesSetter(e.target.checked)}
+                        value="expenses"
+                        label="Expenses"
+                        color="blue"
+                        labelPosition="right"
+                    />
+                </Group>
+
+                <h4 style={{marginBottom: 5}}>In</h4>
+
                 {/* https://mantine.dev/core/checkbox/#controlled-checkboxgroup */}
                 <Radio.Group
                 value={intervalTimeFrame}
@@ -39,6 +71,8 @@ export default ({
                 <Radio value="months" label="months" styles={{radio: {cursor: 'pointer'}}} transitionDuration={250}/>
                 <Radio value="years" label="years" styles={{radio: {cursor: 'pointer'}}} transitionDuration={250}/>
                 </Radio.Group>
+
+                <h4 style={{marginBottom: 5}}>For</h4>
 
                 {/* https://mantine.dev/core/slider/ */}
                 <Text size="sm" weight={500} style={{marginBottom: 10}}>Months in the future</Text>
