@@ -10,6 +10,7 @@ import SalaryIncomeForm from '../components/income-type-forms/salary-income-form
 import HourlyIncomeForm from '../components/income-type-forms/hourly-income-form'
 import GraphConfigDrawer from '../components/graph-configuration-drawer'
 import ExpenseForm from '../components/expense-form'
+import {getBreakdown} from '../mortgage'
 
 // https://codesandbox.io/s/github/reactchartjs/react-chartjs-2/tree/master/sandboxes/line/default?from-embed=&file=/App.tsx
 
@@ -116,7 +117,7 @@ export default function Home() {
     // console.log(expectedNets)
 
     return {
-      label: 'Red',
+      label: 'Income',
       data: expectedNets.map(net => net.expected),
       borderColor: '#32a86f',
       // https://codesandbox.io/s/github/reactchartjs/react-chartjs-2/tree/master/sandboxes/line/area?from-embed=&file=/App.tsx
@@ -137,7 +138,7 @@ export default function Home() {
     }
 
     return {
-      label: 'Red',
+      label: 'Expenses',
       data: expenses,
       borderColor: '#cf3a64',
       // https://codesandbox.io/s/github/reactchartjs/react-chartjs-2/tree/master/sandboxes/line/area?from-embed=&file=/App.tsx
@@ -185,7 +186,7 @@ export default function Home() {
       const expenseDataset = generateExpensesDataset()
 
       let combinedDataset = {
-        label: 'Red',
+        label: 'Net worth',
         // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map
         data: incomeDataset.data.map((income, i) => income - expenseDataset.data[i]),
         borderColor: '#eb8c34',
@@ -197,6 +198,34 @@ export default function Home() {
 
       datasetsToShow = [combinedDataset]
     }
+
+
+    // calc mortgage data
+
+    const incomeDataset = generateIncomeDataset()
+    const expenseDataset = generateExpensesDataset()
+
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map
+    let netDataset = incomeDataset.data.map((income, i) => income - expenseDataset.data[i])
+
+    const amountToPutDownOnPrincipal = 1
+    const interestRate = .05
+    const loanPayPeriod = 15
+    const totalPurchasePrice = 200000
+
+    let mortgageData = netDataset.map(net => getBreakdown(totalPurchasePrice - (net * amountToPutDownOnPrincipal), interestRate, loanPayPeriod))
+
+    const interestPaidLine = {
+      label: 'Interest Paid',
+      data: mortgageData.map(data => data.interestPaid < 0 ? 0 : data.interestPaid),
+      borderColor: '#e0db34',
+      // https://codesandbox.io/s/github/reactchartjs/react-chartjs-2/tree/master/sandboxes/line/area?from-embed=&file=/App.tsx
+      fill: true,
+      // https://www.digitalocean.com/community/tutorials/css-hex-code-colors-alpha-values
+      backgroundColor: '#e0db3414'
+    }
+
+    datasetsToShow.push(interestPaidLine)
 
     const data = {
       // https://stackoverflow.com/a/1643468/17712310
