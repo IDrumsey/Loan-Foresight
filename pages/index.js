@@ -109,6 +109,9 @@ export default function Home() {
   const [showExpensesGraph, showExpensesGraphSetter] = useState(false)
   const [combineIncomeAndExpenses, combineIncomeAndExpensesSetter] = useState(false)
 
+
+  const [loanPeriod, loanPeriodSetter] = useState('15')
+
   const generateIncomeDataset = () => {
 
     // https://dev.to/sanchithasr/7-ways-to-convert-a-string-to-number-in-javascript-4l
@@ -159,7 +162,16 @@ export default function Home() {
   // https://bobbyhadz.com/blog/react-listen-to-state-change#:~:text=Use%20the%20useEffect%20hook%20to,time%20the%20state%20variables%20change.
   useEffect(() => {
     triggerGraphChange()
-  }, [expectedIncomeChange, numMonthsProjected, numYearsProjected, graphIntervalTimeFrame, showIncomeGraph, showExpensesGraph, combineIncomeAndExpenses])
+  }, [
+    expectedIncomeChange,
+    numMonthsProjected,
+    numYearsProjected,
+    graphIntervalTimeFrame,
+    showIncomeGraph,
+    showExpensesGraph,
+    combineIncomeAndExpenses,
+    loanPeriod
+  ])
 
 
   const triggerGraphChange = () => {
@@ -210,7 +222,7 @@ export default function Home() {
 
     const amountToPutDownOnPrincipal = 1
     const interestRate = .05
-    const loanPayPeriod = 15
+    const loanPayPeriod = parseInt(loanPeriod)
     const totalPurchasePrice = 200000
 
     let mortgageData = netDataset.map(net => getBreakdown(totalPurchasePrice - (net * amountToPutDownOnPrincipal), interestRate, loanPayPeriod))
@@ -270,6 +282,8 @@ export default function Home() {
         showingExpensesSetter={showExpensesGraphSetter}
         combineIncomeAndExpenses={combineIncomeAndExpenses}
         combineIncomeAndExpensesSetter={combineIncomeAndExpensesSetter}
+        loanPeriod={loanPeriod}
+        loanPeriodSetter={loanPeriodSetter}
       />
 
 
