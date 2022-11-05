@@ -26,7 +26,7 @@ export default ({
               size="sm"
             >
               <Radio value="combined" label="Just one number is fine" styles={{radio: {cursor: 'pointer'}}} transitionDuration={250}/>
-              <Radio value="granular" label="Give me more control" styles={{radio: {cursor: 'pointer'}}} transitionDuration={250}/>
+              <Radio value="granular" label="Give me more control" styles={{radio: {cursor: 'pointer'}}} transitionDuration={250} disabled={true} />
             </Radio.Group>
           
           {

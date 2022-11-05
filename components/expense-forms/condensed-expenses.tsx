@@ -37,9 +37,9 @@ const CondensedExpenseForm = ({
             }}
             size="sm"
             >
-            <Radio value="week" label="week" styles={{radio: {cursor: 'pointer'}}} transitionDuration={250}/>
+            <Radio value="week" label="week" styles={{radio: {cursor: 'pointer'}}} transitionDuration={250} disabled={true} />
             <Radio value="month" label="month" styles={{radio: {cursor: 'pointer'}}} transitionDuration={250}/>
-            <Radio value="year" label="year" styles={{radio: {cursor: 'pointer'}}} transitionDuration={250}/>
+            <Radio value="year" label="year" styles={{radio: {cursor: 'pointer'}}} transitionDuration={250} disabled={true} />
         </Radio.Group>
 
         <TextInput
