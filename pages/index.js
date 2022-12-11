@@ -4,7 +4,7 @@ import styles from '../styles/Home.module.css'
 import { Chart, Line } from 'react-chartjs-2'
 import { SegmentedControl, NativeSelect, TextInput, Slider, Space, Text, Divider, Drawer, Button, Radio } from '@mantine/core'
 import { GoSettings } from 'react-icons/go'
-import {calcProjectedNets, generateDates} from '../finance-planner'
+import {calcProjectedNets, generateDates, calcInterestRange, generateRangeHighlightData, calcAvgSavedPerTimeFrame} from '../finance-planner'
 import IncomeForm from '../components/income-form'
 import SalaryIncomeForm from '../components/income-type-forms/salary-income-form'
 import HourlyIncomeForm from '../components/income-type-forms/hourly-income-form'
@@ -75,15 +75,18 @@ const lineChartOptions = {
     },
     y: {
       ticks: {
-      padding: 10
-    }
+        padding: 10
+      },
+      // maybe cite - https://stackoverflow.com/questions/41216308/chartjs-how-to-set-fixed-y-axis-max-and-min
+      // maybe cite - https://stackoverflow.com/questions/28990708/how-to-set-max-and-min-value-for-y-axis
+      // max: 500000
   }
   }
 }
 
 
 
-const salaryDefault = 54000
+const salaryDefault = 48000
 const minSalaryChange = -10
 const maxSalaryChange = 100
 const mainWrapperWidth = 450
@@ -91,23 +94,55 @@ const mainWrapperWidth = 450
 
 export default function Home() {
 
+  const [graphOptions, graphOptionsSetter] = useState(lineChartOptions)
+
   const [graphData, graphDataSetter] = useState()
-  const [incomeType, setIncomeType] = useState('hourly')
+  const [incomeType, setIncomeType] = useState('salary')
   const [expectedIncomeChange, setExpectedIncomeChange] = useState(3)
   const [graphConfigDrawerOpen, setGraphConfigDrawerOpen] = useState(false)
-  const [numMonthsProjected, setNumMonthsProjected] = useState(12)
+  const [numMonthsProjected, setNumMonthsProjected] = useState(24)
   const [numYearsProjected, setNumYearsProjected] = useState(1)
   const [graphIntervalTimeFrame, setGraphIntervalTimeFrame] = useState('months')
   const [salary, setSalary] = useState(salaryDefault.toString())
-  const [currNetWorth, setCurrNetWorth] = useState(0)
+  const [currNetWorth, setCurrNetWorth] = useState(50000)
   const [formGranularity, formGranularitySetter] = useState('combined')
   const [condensedExpenseInputGranularity, condensedExpenseInputGranularitySetter] = useState('month')
   // https://www.google.com/search?q=how+much+expenses+does+the+typical+person+have+percentage+wise&rlz=1C1ONGR_enUS977US977&oq=how+much+expenses+does+the+typical+person+have+percentage+wise&aqs=chrome..69i57j33i160.18844j1j7&sourceid=chrome&ie=UTF-8#:~:text=73%25%20of%20the%20average%20monthly%20income
-  const [expensesPerPeriod, expensesPerPeriodSetter] = useState(73)
+  const [expensesPerPeriod, expensesPerPeriodSetter] = useState(250)
 
   const [showIncomeGraph, showIncomeGraphSetter] = useState(true)
-  const [showExpensesGraph, showExpensesGraphSetter] = useState(false)
-  const [combineIncomeAndExpenses, combineIncomeAndExpensesSetter] = useState(false)
+  const [showExpensesGraph, showExpensesGraphSetter] = useState(true)
+  const [combineIncomeAndExpenses, combineIncomeAndExpensesSetter] = useState(true)
+  const [loanAmount, loanAmountSetter] = useState(150000)
+  const [maxInterestPaid, maxInterestPaidSetter] = useState(0)
+  const [percentToPutDown, percentToPutDownSetter] = useState(0.8)
+  const [interestRate, interestRateSetter] = useState(7)
+
+  const [avgSavedPerTimeInterval, avgSavedPerTimeIntervalSetter] = useState(null)
+  const [showInterestPaidPerYear, showInterestPaidPerYearSetter] = useState(false)
+
+  const [useRelativeMaxInterest, useRelativeMaxInterestSetter] = useState(true)
+  const [relativeMaxInterest, relativeMaxInterestSetter] = useState(0.8)
+
+
+  useEffect(() => {
+    console.log(`Graph options changed`)
+    console.log(graphOptions.scales.y)
+  }, [graphOptions])
+
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      // console.log('asfd')
+
+      let test = graphOptions
+      test.scales.y.ticks.max += 1000
+      // graphOptions.scales.y.ticks.max += 1000
+      graphOptionsSetter(test)
+    }, .5)
+
+    return () => {clearInterval(interval)}
+  }, [])
 
 
   const [loanPeriod, loanPeriodSetter] = useState('15')
@@ -170,7 +205,12 @@ export default function Home() {
     showIncomeGraph,
     showExpensesGraph,
     combineIncomeAndExpenses,
-    loanPeriod
+    loanPeriod,
+    percentToPutDown,
+    interestRate,
+    showInterestPaidPerYear,
+    useRelativeMaxInterest,
+    relativeMaxInterest
   ])
 
 
@@ -220,13 +260,10 @@ export default function Home() {
     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map
     let netDataset = incomeDataset.data.map((income, i) => income - expenseDataset.data[i])
 
-    const amountToPutDownOnPrincipal = 1
-    const interestRate = .05
     const loanPayPeriod = parseInt(loanPeriod)
-    const totalPurchasePrice = 200000
 
-    let mortgageData = netDataset.map(net => getBreakdown(totalPurchasePrice - (net * amountToPutDownOnPrincipal), interestRate, loanPayPeriod))
-
+    let mortgageData = netDataset.map(net => getBreakdown(loanAmount - (net * percentToPutDown), interestRate / 100, loanPayPeriod))
+    console.log(mortgageData)
     const interestPaidLine = {
       label: 'Interest Paid',
       data: mortgageData.map(data => data.interestPaid < 0 ? 0 : data.interestPaid),
@@ -239,6 +276,57 @@ export default function Home() {
 
     datasetsToShow.push(interestPaidLine)
 
+
+    // https://stackoverflow.com/a/10865042
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/max
+    // possible cite - https://stackoverflow.com/a/66625012
+    let newYMax = Math.max(...(datasetsToShow.map(dataset => dataset.data)).flat(1))
+
+    // add extra for padding
+    newYMax *= 1.5
+
+    // console.log(`new max : ${newYMax}`)
+
+    // console.log(`current max : ${graphOptions.scales.y.max}`)
+    // if((newYMax > graphOptions.scales.y.ticks.max) || graphOptions.scales.y.ticks.max == undefined) {
+    //   console.log('setting')
+    //   // https://stackoverflow.com/a/35553748/17712310
+    //   // graphOptions.scales.y.ticks.suggestedMax = newYMax
+    //   graphOptions.scales.y.ticks.max = newYMax
+    // }
+
+
+    // calc acceptable interest paid date range
+    let acceptableInterestRanges = calcInterestRange(useRelativeMaxInterest ? relativeMaxInterest : maxInterestPaid, interestPaidLine.data, datesForXAxis, mortgageData.map(data => data.total), useRelativeMaxInterest)
+
+    console.log('test')
+    console.log(acceptableInterestRanges)
+
+    let acceptableRangesIndexes = acceptableInterestRanges.map(dateRange => {
+      return [datesForXAxis.findIndex(date => date == dateRange[0]), datesForXAxis.findIndex(date => date == dateRange[1])]
+    })
+
+    let rangeHighlightPlots = generateRangeHighlightData(datesForXAxis.map(date => date.toLocaleDateString()), acceptableRangesIndexes, newYMax)
+    datasetsToShow.push(rangeHighlightPlots)
+
+
+
+    if(showInterestPaidPerYear){
+      // calculate avg interest paid per year
+
+      const interestPaidPerYearLine = {
+        label: 'Interest Paid Per Year',
+        data: interestPaidLine.data.map(interestPaidTotal => interestPaidTotal / loanPayPeriod),
+        borderColor: '#ebf0b9',
+        // https://codesandbox.io/s/github/reactchartjs/react-chartjs-2/tree/master/sandboxes/line/area?from-embed=&file=/App.tsx
+        fill: true,
+        // https://www.digitalocean.com/community/tutorials/css-hex-code-colors-alpha-values
+        backgroundColor: '#ebf0b914'
+      }
+
+      datasetsToShow.push(interestPaidPerYearLine)
+    }
+
     const data = {
       // https://stackoverflow.com/a/1643468/17712310
       // https://stackoverflow.com/a/18648314/17712310
@@ -248,6 +336,9 @@ export default function Home() {
     }
 
     graphDataSetter(data)
+
+    // update savings per time interval
+    avgSavedPerTimeIntervalSetter(calcAvgSavedPerTimeFrame(interestPaidLine.data))
   }
   
   return (
@@ -284,6 +375,21 @@ export default function Home() {
         combineIncomeAndExpensesSetter={combineIncomeAndExpensesSetter}
         loanPeriod={loanPeriod}
         loanPeriodSetter={loanPeriodSetter}
+        loanAmount={loanAmount}
+        loanAmountSetter={loanAmountSetter}
+        triggerUpdateGraph={triggerGraphChange}
+        maxInterestPaid={maxInterestPaid}
+        maxInterestPaidSetter={maxInterestPaidSetter}
+        percentToPutDown={percentToPutDown}
+        percentToPutDownSetter={percentToPutDownSetter}
+        interestRate={interestRate}
+        interestRateSetter={interestRateSetter}
+        showInterestPaidPerYear={showInterestPaidPerYear}
+        showInterestPaidPerYearSetter={showInterestPaidPerYearSetter}
+        useRelativeMaxInterest={useRelativeMaxInterest}
+        useRelativeMaxInterestSetter={useRelativeMaxInterestSetter}
+        relativeMaxInterest={relativeMaxInterest}
+        relativeMaxInterestSetter={relativeMaxInterestSetter}
       />
 
 
@@ -296,11 +402,25 @@ export default function Home() {
         marginRight: 'auto'
       }}>
 
+        <div className="graphInsights"
+          style={{
+            marginBottom: 25
+          }}
+        >
+          {/* average amount of money saved based on conditions */}
+          {/* {
+            avgSavedPerTimeInterval &&
+
+            // https://stackoverflow.com/a/16233919
+            <Text>Avg saved per {graphIntervalTimeFrame == 'months' ? 'month' : 'year'} : {Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD'}).format(avgSavedPerTimeInterval)}</Text>
+          } */}
+        </div>
+
         {
           graphData && 
 
           <div className={styles.graphWrapper}>
-            <Line data={graphData} options={lineChartOptions}/>
+            <Line data={graphData} options={graphOptions}/>
           </div>
         }
 
