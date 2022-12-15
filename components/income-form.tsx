@@ -25,7 +25,8 @@ export default ({
                 value={incomeTypeControl}
                 onChange={incomeTypeControlSetter}
                 data={[
-                {label: 'Hourly', 'value': 'hourly'},
+                  // https://mantine.dev/core/segmented-control/#disabled
+                {label: 'Hourly', 'value': 'hourly', disabled: true},
                 {label: 'Salary', 'value': 'salary'}
                 ]}
                 sx={{
