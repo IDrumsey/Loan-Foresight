@@ -24,3 +24,13 @@ a {
     background: black;
   }
 }
+
+
+#releases-link {
+  color: rgb(79, 120, 192);
+  transition: filter 100ms linear;
+}
+
+#releases-link:hover {
+  filter: brightness(1.3);
+}

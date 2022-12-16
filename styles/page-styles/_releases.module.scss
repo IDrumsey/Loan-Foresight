@@ -1,0 +1,75 @@
+#releases-wrapper {
+    width: 60%;
+    margin: auto;
+    padding: 40px 0;
+}
+
+#header {
+    display: flex;
+    margin-bottom: 15px;
+}
+
+#page-title {
+    margin: 0;
+}
+
+
+.horizontal-line {
+    height: 1px;
+    background-color: #8C8C8C;
+    width: 100%;
+}
+
+
+.release-details {
+    padding: 35px 0;
+}
+
+.release-details:not(:last-child) {
+    border-bottom: 1px solid #8C8C8C;
+}
+
+.release-title {
+    color: #fff;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.release-date {
+    margin-top: 5px;
+    font-size: 14px;
+}
+
+
+.features-title,
+.bug-fixes-title {
+    font-size: 14px;
+    margin: 0;
+    margin-top: 25px;
+    font-weight: 500;
+}
+
+
+.release-features,
+.release-bug-fixes {
+    li:not(:last-child) {
+        margin-bottom: 2px;
+    }
+}
+
+
+.feature-wrapper,
+.bug-fix-wrapper {
+    padding: 2px 0;
+}
+
+
+.features-title {
+    color: #91D9BB;
+}
+
+
+.bug-fixes-title {
+    color: #D0679A;
+    margin-top: 35px;
+}

@@ -11,6 +11,7 @@ import HourlyIncomeForm from '../components/income-type-forms/hourly-income-form
 import GraphConfigDrawer from '../components/graph-configuration-drawer'
 import ExpenseForm from '../components/expense-form'
 import {getBreakdown} from '../mortgage'
+import Link from 'next/link'
 
 // https://codesandbox.io/s/github/reactchartjs/react-chartjs-2/tree/master/sandboxes/line/default?from-embed=&file=/App.tsx
 
@@ -458,6 +459,17 @@ export default function Home() {
               triggerGraphChange
             }}
           />
+        </div>
+
+        <div id="footer" style={{
+          padding: '25px 0',
+          display: 'flex',
+          columnGap: '5px'
+        }}>
+          {/* https://nextjs.org/docs/api-reference/next/link#if-the-child-is-a-tag */}
+          <Link href="/releases" legacyBehavior>
+            <a id="releases-link">Releases</a>
+          </Link>
         </div>
       </div>
     </div>
