@@ -1,6 +1,6 @@
 
 
-export default () => {
+const HourlyIncomeForm = () => {
 
     return (
         <>
@@ -8,3 +8,8 @@ export default () => {
         </>
     )
 }
+
+// https://stackoverflow.com/a/52993237/17712310
+HourlyIncomeForm.displayName = 'HourlyIncomeForm'
+
+export default HourlyIncomeForm

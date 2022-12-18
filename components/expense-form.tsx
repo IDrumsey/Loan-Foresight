@@ -1,7 +1,7 @@
 import {Text, Divider, Radio, TextInput} from '@mantine/core'
 import CondensedExpenseForm from './expense-forms/condensed-expenses'
 
-export default ({
+const ExpenseForm = ({
     formGranularity,
     formGranularitySetter,
     condensedExpenseInputGranularity,
@@ -52,3 +52,5 @@ export default ({
         </>
     )
 }
+
+export default ExpenseForm

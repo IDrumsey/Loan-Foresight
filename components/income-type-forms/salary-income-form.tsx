@@ -1,7 +1,7 @@
 import {TextInput, Space, Text, Slider, NativeSelect} from '@mantine/core'
 import {useEffect} from 'react'
 
-export default ({
+const SalaryIncomeForm = ({
     triggerUpdateGraph,
     salaryControl,
     salaryControlSetter,
@@ -75,3 +75,8 @@ const incomeCurrencySelector = (
       }}
     />
 )
+
+// https://stackoverflow.com/a/52993237/17712310
+SalaryIncomeForm.displayName = 'SalaryIncomeForm'
+
+export default SalaryIncomeForm

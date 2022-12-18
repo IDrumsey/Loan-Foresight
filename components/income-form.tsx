@@ -1,7 +1,7 @@
 import {Text, Divider, SegmentedControl, TextInput} from '@mantine/core'
 
 // https://www.typescriptlang.org/docs/handbook/2/functions.html
-export default ({
+const IncomeForm = ({
     triggerUpdateGraph,
     incomeTypeControl, 
     incomeTypeControlSetter,
@@ -65,3 +65,8 @@ export default ({
         </>
     )
 }
+
+// https://stackoverflow.com/a/52993237/17712310
+IncomeForm.displayName = 'IncomeForm'
+
+export default IncomeForm

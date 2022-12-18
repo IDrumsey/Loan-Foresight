@@ -1,7 +1,7 @@
 import {Drawer, Text, Divider, Radio, Slider, Group, Checkbox, SegmentedControl, TextInput, ScrollArea} from '@mantine/core'
 import {useState} from 'react'
 
-export default ({
+const GraphConfigDrawer = ({
     isOpen,
     isOpenSetter,
     intervalTimeFrame,
@@ -30,7 +30,8 @@ export default ({
     showInterestPaidPerYear,
     showInterestPaidPerYearSetter,
     useRelativeMaxInterest,
-    useRelativeMaxInterestSetter,
+    // https://stackoverflow.com/a/59465373/17712310
+    useRelativeMaxInterestSetter: usingRelativeMaxInterestSetter,
     relativeMaxInterest,
     relativeMaxInterestSetter
 }) => {
@@ -264,7 +265,7 @@ export default ({
                                 marginBottom: 50
                             }}
                             checked={useRelativeMaxInterest}
-                            onChange={e => useRelativeMaxInterestSetter(e.target.checked)}
+                            onChange={e => usingRelativeMaxInterestSetter(e.target.checked)}
                             value="useRelativeInterestMax"
                             label="Relative to total loan amount?"
                             color="blue"
@@ -311,3 +312,8 @@ export default ({
         </>
     )
 }
+
+// https://stackoverflow.com/a/52993237/17712310
+GraphConfigDrawer.displayName = 'GraphConfigDrawer'
+
+export default GraphConfigDrawer

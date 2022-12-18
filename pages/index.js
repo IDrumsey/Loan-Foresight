@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef, useCallback } from 'react'
 import styles from '../styles/Home.module.css'
 import { Chart, Line } from 'react-chartjs-2'
 import { SegmentedControl, NativeSelect, TextInput, Slider, Space, Text, Divider, Drawer, Button, Radio } from '@mantine/core'
@@ -97,6 +97,13 @@ export default function Home() {
 
   const [graphOptions, graphOptionsSetter] = useState(lineChartOptions)
 
+  const graphOptionsRef = useRef(graphOptions)
+
+  // keep graph options ref up to date
+  useEffect(() => {
+    graphOptionsRef.current = graphOptions
+  }, [graphOptions])
+
   const [graphData, graphDataSetter] = useState()
   const [incomeType, setIncomeType] = useState('salary')
   const [expectedIncomeChange, setExpectedIncomeChange] = useState(3)
@@ -122,7 +129,8 @@ export default function Home() {
   const [avgSavedPerTimeInterval, avgSavedPerTimeIntervalSetter] = useState(null)
   const [showInterestPaidPerYear, showInterestPaidPerYearSetter] = useState(false)
 
-  const [useRelativeMaxInterest, useRelativeMaxInterestSetter] = useState(true)
+  // https://stackoverflow.com/a/59465373/17712310
+  const [useRelativeMaxInterest, usingRelativeMaxInterestSetter] = useState(true)
   const [relativeMaxInterest, relativeMaxInterestSetter] = useState(0.8)
 
 
@@ -136,7 +144,7 @@ export default function Home() {
     const interval = setInterval(() => {
       // console.log('asfd')
 
-      let test = graphOptions
+      let test = graphOptionsRef.current
       test.scales.y.ticks.max += 1000
       // graphOptions.scales.y.ticks.max += 1000
       graphOptionsSetter(test)
@@ -148,7 +156,7 @@ export default function Home() {
 
   const [loanPeriod, loanPeriodSetter] = useState('15')
 
-  const generateIncomeDataset = () => {
+  const generateIncomeDataset = useCallback(() => {
 
     // https://dev.to/sanchithasr/7-ways-to-convert-a-string-to-number-in-javascript-4l
     const expectedNets = calcProjectedNets(parseInt(currNetWorth), parseInt(salary), expectedIncomeChange / 100, numMonthsProjected, graphIntervalTimeFrame)
@@ -164,10 +172,18 @@ export default function Home() {
       // https://www.digitalocean.com/community/tutorials/css-hex-code-colors-alpha-values
       backgroundColor: '#32a86f14'
     }
-  }
+  }, [
+    currNetWorth,
+    expectedIncomeChange,
+    graphIntervalTimeFrame,
+    numMonthsProjected,
+    salary
+  ])
 
 
-  const generateExpensesDataset = () => {
+
+  // https://stackoverflow.com/a/70033156/17712310
+  const generateExpensesDataset = useCallback(() => {
 
     let expenses = [0]
     const iCap = graphIntervalTimeFrame == "months" ? numMonthsProjected : numYearsProjected
@@ -185,37 +201,18 @@ export default function Home() {
       // https://www.digitalocean.com/community/tutorials/css-hex-code-colors-alpha-values
       backgroundColor: '#cf3a6414'
     }
-  }
-
-
-  // initially build the graph
-  useEffect(() => {
-    triggerGraphChange()
-  }, [])
-
-
-  // update graph when the specified parameters change
-  // https://bobbyhadz.com/blog/react-listen-to-state-change#:~:text=Use%20the%20useEffect%20hook%20to,time%20the%20state%20variables%20change.
-  useEffect(() => {
-    triggerGraphChange()
   }, [
-    expectedIncomeChange,
-    numMonthsProjected,
-    numYearsProjected,
+    expensesPerPeriod,
     graphIntervalTimeFrame,
-    showIncomeGraph,
-    showExpensesGraph,
-    combineIncomeAndExpenses,
-    loanPeriod,
-    percentToPutDown,
-    interestRate,
-    showInterestPaidPerYear,
-    useRelativeMaxInterest,
-    relativeMaxInterest
+    numMonthsProjected,
+    numYearsProjected
   ])
 
 
-  const triggerGraphChange = () => {
+
+  // https://stackoverflow.com/a/64896990/17712310
+  // https://stackoverflow.com/a/62601621/17712310
+  const triggerGraphChange = useCallback(() => {
 
     const datesForXAxis = generateDates(graphIntervalTimeFrame, graphIntervalTimeFrame == "months" ? numMonthsProjected : numYearsProjected)
 
@@ -340,7 +337,52 @@ export default function Home() {
 
     // update savings per time interval
     avgSavedPerTimeIntervalSetter(calcAvgSavedPerTimeFrame(interestPaidLine.data))
-  }
+  }, [combineIncomeAndExpenses,
+    generateExpensesDataset,
+    generateIncomeDataset,
+    graphIntervalTimeFrame,
+    interestRate,
+    loanAmount,
+    loanPeriod,
+    maxInterestPaid,
+    numMonthsProjected,
+    numYearsProjected,
+    percentToPutDown,
+    relativeMaxInterest,
+    showExpensesGraph,
+    showIncomeGraph,
+    showInterestPaidPerYear,
+    useRelativeMaxInterest
+  ])
+
+
+  // initially build the graph
+  useEffect(() => {
+    triggerGraphChange()
+  }, [triggerGraphChange])
+
+
+  // update graph when the specified parameters change
+  // https://bobbyhadz.com/blog/react-listen-to-state-change#:~:text=Use%20the%20useEffect%20hook%20to,time%20the%20state%20variables%20change.
+  useEffect(() => {
+    triggerGraphChange()
+  }, [
+    expectedIncomeChange,
+    numMonthsProjected,
+    numYearsProjected,
+    graphIntervalTimeFrame,
+    showIncomeGraph,
+    showExpensesGraph,
+    combineIncomeAndExpenses,
+    loanPeriod,
+    percentToPutDown,
+    interestRate,
+    showInterestPaidPerYear,
+    useRelativeMaxInterest,
+    relativeMaxInterest,
+    triggerGraphChange
+  ])
+
   
   return (
     <div className={styles.container}>
@@ -388,7 +430,7 @@ export default function Home() {
         showInterestPaidPerYear={showInterestPaidPerYear}
         showInterestPaidPerYearSetter={showInterestPaidPerYearSetter}
         useRelativeMaxInterest={useRelativeMaxInterest}
-        useRelativeMaxInterestSetter={useRelativeMaxInterestSetter}
+        useRelativeMaxInterestSetter={usingRelativeMaxInterestSetter}
         relativeMaxInterest={relativeMaxInterest}
         relativeMaxInterestSetter={relativeMaxInterestSetter}
       />
