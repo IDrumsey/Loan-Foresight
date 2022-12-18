@@ -1,9 +1,10 @@
 import Head from 'next/head'
 import { useEffect, useState, useRef, useCallback } from 'react'
-import styles from '../styles/Home.module.css'
+import styles from '../styles/page-styles/home.module.scss'
 import { Chart, Line } from 'react-chartjs-2'
 import { SegmentedControl, NativeSelect, TextInput, Slider, Space, Text, Divider, Drawer, Button, Radio } from '@mantine/core'
 import { GoSettings } from 'react-icons/go'
+import { IoMdClose } from 'react-icons/io'
 import {calcProjectedNets, generateDates, calcInterestRange, generateRangeHighlightData, calcAvgSavedPerTimeFrame} from '../finance-planner'
 import IncomeForm from '../components/income-form'
 import SalaryIncomeForm from '../components/income-type-forms/salary-income-form'
@@ -132,6 +133,9 @@ export default function Home() {
   // https://stackoverflow.com/a/59465373/17712310
   const [useRelativeMaxInterest, usingRelativeMaxInterestSetter] = useState(true)
   const [relativeMaxInterest, relativeMaxInterestSetter] = useState(0.8)
+
+  const [showingDisclaimerCard, showingDisclaimerCardSetter] = useState(true)
+  const [hoveringDisclaimerCloseBtn, hoveringDisclaimerCloseBtnSetter] = useState(false)
 
 
   useEffect(() => {
@@ -444,6 +448,23 @@ export default function Home() {
         marginLeft: graphConfigDrawerOpen ? '5%' : `calc(50% - ${mainWrapperWidth/2}px)`,
         marginRight: 'auto'
       }}>
+
+        {/* disclaimer */}
+        {
+          showingDisclaimerCard && <div id={`${styles['disclaimer-card']}`}>
+            <div id={`${styles['disclaimer-top']}`}>
+              <h4 style={{fontWeight: 'bold', margin: 0}}>Disclaimer</h4>
+              <IoMdClose
+                style={{marginLeft: 'auto', cursor: 'pointer'}}
+                color={hoveringDisclaimerCloseBtn ? '#f50a1e' : '#a3222d'}
+                onMouseEnter={() => hoveringDisclaimerCloseBtnSetter(true)}
+                onMouseLeave={() => hoveringDisclaimerCloseBtnSetter(false)}
+                onClick={() => showingDisclaimerCardSetter(false)}
+              />
+            </div>
+            <p style={{margin: 0, marginTop: 10}}>Nothing here is garunteed to be accurate. Use at your own risk.</p>
+          </div>
+        }
 
         <div className="graphInsights"
           style={{
