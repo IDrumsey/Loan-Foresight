@@ -29,7 +29,7 @@ const releases: ReleaseSpecs[] = [
         minor: 0,
         batch: 0,
         beta: false,
-        releaseDate: new Date("12/15/2022"),
+        releaseDate: new Date("12/19/2022"),
         features: [
             {
                 title: "Visualize data with line graphs",
