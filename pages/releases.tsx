@@ -50,12 +50,12 @@ const ReleasesPage = () => {
                                 <ul className={`${styles['release-features']}`}>
                                     {
                                         release.features.map((feature, j) => {
-                                            return <>
-                                                <li key={`feature-title-${j}`} className={`${styles['feature-wrapper']}`}>{feature.title}</li>
+                                            return <div key={`feature-${i}-${j}`}>
+                                                <li className={`${styles['feature-wrapper']}`}>{feature.title}</li>
                                                 {
-                                                    feature.desc && <p key={`feature-desc-${j}`} className={`${styles['feature-desc']}`}>{feature.desc}</p>
+                                                    feature.desc && <p className={`${styles['feature-desc']}`}>{feature.desc}</p>
                                                 }
-                                            </>
+                                            </div>
                                         })
                                     }
                                 </ul>
