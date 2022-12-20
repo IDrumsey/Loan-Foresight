@@ -9,3 +9,6 @@
 
 - Cherry picking commits
     - https://www.atlassian.com/git/tutorials/cherry-pick
+
+- Fix for v1.0.0 deployment
+    - https://github.blog/changelog/2021-02-17-github-actions-limit-which-branches-can-deploy-to-an-environment/
