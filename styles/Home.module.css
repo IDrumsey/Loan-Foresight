@@ -135,12 +135,77 @@
 
 
 .mainWrapper {
-  width: 50%;
+  width: 100%;
   padding: 50px 0;
+  /* https://stackoverflow.com/a/30587944/17712310 */
   transition: margin-left 225ms linear;
+  margin-left: 50%;
+  transform: translateX(-50%);
 }
 
 .graphWrapper {
   height: 300px;
   margin-bottom: 25px;
+}
+
+
+/* https://css-tricks.com/a-complete-guide-to-css-media-queries/ */
+@media only screen and (max-width: 350px) {
+
+  .container {
+    padding: 0 1rem;
+  }
+
+}
+
+
+@media only screen and (min-width: 500px) {
+
+  .mainWrapper {
+    width: 90%;
+  }
+
+}
+
+
+@media only screen and (min-width: 700px) {
+
+  .mainWrapper {
+    width: 80%;
+  }
+
+}
+
+
+@media only screen and (min-width: 900px) {
+
+  .mainWrapper {
+    width: 70%;
+  }
+
+}
+
+
+@media only screen and (min-width: 900px) {
+  .mainWrapperConfigOpen {
+    margin-left: 35%;
+  }
+}
+
+
+@media only screen and (min-width: 950px) {
+
+  .mainWrapper {
+    width: 65%;
+  }
+
+}
+
+
+@media only screen and (min-width: 1050px) {
+
+  .mainWrapper {
+    width: 50%;
+  }
+
 }

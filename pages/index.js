@@ -393,7 +393,7 @@ export default function Home() {
       </Head>
 
       {/* button to open the graph configuration drawer */}
-      <Button style={{position: 'absolute', top: 25, right: 25}} variant="transparent" size="xl" color="gray"
+      <Button style={{position: 'absolute', top: 25, right: 25, zIndex: 99}} variant="transparent" size="xl" color="gray"
         // https://stackoverflow.com/a/59304431/17712310
         onClick={() => setGraphConfigDrawerOpen(!graphConfigDrawerOpen)}
       >
@@ -438,12 +438,7 @@ export default function Home() {
 
 
       {/* https://youtu.be/Ge6PQkpa6pA */}
-      <div className={styles.mainWrapper} style={{
-        width: `${mainWrapperWidth}px`,
-        // https://stackoverflow.com/a/30587944/17712310
-        marginLeft: graphConfigDrawerOpen ? '5%' : `calc(50% - ${mainWrapperWidth/2}px)`,
-        marginRight: 'auto'
-      }}>
+      <div className={`${styles.mainWrapper} ${graphConfigDrawerOpen ? styles.mainWrapperConfigOpen : ''}`}>
 
         <div className="graphInsights"
           style={{
