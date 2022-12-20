@@ -21,7 +21,7 @@ export interface ReleaseBugFix {
 }
 
 
-
+// semantic versioning - https://youtu.be/MdzJuQdjKOE
 
 const releases: ReleaseSpecs[] = [
     {
@@ -52,6 +52,20 @@ const releases: ReleaseSpecs[] = [
             }
         ],
         bugFixes: []
+    },
+
+    {
+        major: 1,
+        minor: 0,
+        batch: 1,
+        beta: false,
+        releaseDate: new Date("12/20/2022"),
+        features: [],
+        bugFixes: [
+            {
+                title: "Align release page feature bullet points to left."
+            }
+        ]
     }
 ]
 
