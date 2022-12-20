@@ -44,23 +44,38 @@ const ReleasesPage = () => {
                             {/* https://date-fns.org/v2.29.3/docs/format */}
                             <div className={`${styles['release-date']}`}>{format(release.releaseDate, "MMMM d, y")}</div>
 
-                            <h5 className={`${styles['features-title']}`}>Releases</h5>
-                            <ul className={`${styles['release-features']}`}>
-                                {
-                                    release.features.map((feature, j) => {
-                                        return <li key={j} className={`${styles['feature-wrapper']}`}>{feature.title}</li>
-                                    })
-                                }
-                            </ul>
+                            {
+                                release.features.length > 0 && <>
+                                <h5 className={`${styles['features-title']}`}>Features</h5>
+                                <ul className={`${styles['release-features']}`}>
+                                    {
+                                        release.features.map((feature, j) => {
+                                            return <>
+                                                <li key={`feature-title-${j}`} className={`${styles['feature-wrapper']}`}>{feature.title}</li>
+                                                {
+                                                    feature.desc && <p key={`feature-desc-${j}`} className={`${styles['feature-desc']}`}>{feature.desc}</p>
+                                                }
+                                            </>
+                                        })
+                                    }
+                                </ul>
+                                </>
+                            }
 
-                            <h5 className={`${styles['bug-fixes-title']}`}>Bug Fixes</h5>
-                            <ul className={`${styles['release-bug-fixes']}`}>
-                                {
-                                    release.bugFixes.map((bugFix, w) => {
-                                        return <li key={w} className={`${styles['bug-fix-wrapper']}`}>{bugFix.title}</li>
-                                    })
-                                }
-                            </ul>
+
+                            {
+                                release.bugFixes.length > 0 && <>
+                                <h5 className={`${styles['bug-fixes-title']}`}>Bug Fixes</h5>
+                                <ul className={`${styles['release-bug-fixes']}`}>
+                                    {
+                                        release.bugFixes.map((bugFix, w) => {
+                                            return <li key={w} className={`${styles['bug-fix-wrapper']}`}>{bugFix.title}</li>
+                                        })
+                                    }
+                                </ul>
+                                </>
+                            }
+
                         </div>
                     })
                 }
