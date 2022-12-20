@@ -21,7 +21,7 @@ export interface ReleaseBugFix {
 }
 
 
-
+// semantic versioning - https://youtu.be/MdzJuQdjKOE
 
 const releases: ReleaseSpecs[] = [
     {
