@@ -3,6 +3,7 @@ import { useEffect, useState, useRef, useCallback } from 'react'
 import styles from '../styles/page-styles/home.module.scss'
 import { Chart, Line } from 'react-chartjs-2'
 import { SegmentedControl, NativeSelect, TextInput, Slider, Space, Text, Divider, Drawer, Button, Radio } from '@mantine/core'
+import { useHotkeys } from '@mantine/hooks'
 import { GoSettings } from 'react-icons/go'
 import { IoMdClose } from 'react-icons/io'
 import {calcProjectedNets, generateDates, calcInterestRange, generateRangeHighlightData, calcAvgSavedPerTimeFrame} from '../finance-planner'
@@ -385,6 +386,12 @@ export default function Home() {
     useRelativeMaxInterest,
     relativeMaxInterest,
     triggerGraphChange
+  ])
+
+
+  // https://mantine.dev/hooks/use-hotkeys/
+  useHotkeys([
+    ['ctrl+shift+c', () => setGraphConfigDrawerOpen(!graphConfigDrawerOpen)]
   ])
 
   
