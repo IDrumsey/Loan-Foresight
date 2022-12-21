@@ -66,6 +66,20 @@ const releases: ReleaseSpecs[] = [
                 title: "Align release page feature bullet points to left."
             }
         ]
+    },
+
+    {
+        major: 1,
+        minor: 1,
+        batch: 0,
+        beta: false,
+        releaseDate: new Date("12/20/2022"),
+        features: [
+            {
+                title: "Hotkey shortcut for opening and closing the configuration panel."
+            }
+        ],
+        bugFixes: []
     }
 ]
 
