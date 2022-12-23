@@ -76,7 +76,7 @@ const releases: ReleaseSpecs[] = [
         releaseDate: new Date("12/20/2022"),
         features: [
             {
-                title: "Hotkey shortcut for opening and closing the configuration panel."
+                title: "Hotkey shortcut for opening and closing the configuration panel on the home page. Use ctrl-shift-c."
             }
         ],
         bugFixes: []
