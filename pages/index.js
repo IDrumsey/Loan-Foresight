@@ -1,12 +1,12 @@
 import Head from 'next/head'
 import { useEffect, useState, useRef, useCallback } from 'react'
 import styles from '../styles/page-styles/home.module.scss'
-import { Chart, Line } from 'react-chartjs-2'
-import { SegmentedControl, NativeSelect, TextInput, Slider, Space, Text, Divider, Drawer, Button, Radio } from '@mantine/core'
+import { Line } from 'react-chartjs-2'
+import { Button } from '@mantine/core'
 import { useHotkeys } from '@mantine/hooks'
 import { GoSettings } from 'react-icons/go'
 import { IoMdClose } from 'react-icons/io'
-import {calcProjectedNets, generateDates, calcInterestRange, generateRangeHighlightData, calcAvgSavedPerTimeFrame} from '../finance-planner'
+import {calcProjectedNets, generateDates, calcInterestRange, calcAvgSavedPerTimeFrame, generateCriteriaMatchBackgroundConfigs} from '../finance-planner'
 import IncomeForm from '../components/income-form'
 import SalaryIncomeForm from '../components/income-type-forms/salary-income-form'
 import HourlyIncomeForm from '../components/income-type-forms/hourly-income-form'
@@ -14,6 +14,8 @@ import GraphConfigDrawer from '../components/graph-configuration-drawer'
 import ExpenseForm from '../components/expense-form'
 import {getBreakdown} from '../mortgage'
 import Link from 'next/link'
+
+import ChartJSPluginAnnotations from 'chartjs-plugin-annotation'
 
 // https://codesandbox.io/s/github/reactchartjs/react-chartjs-2/tree/master/sandboxes/line/default?from-embed=&file=/App.tsx
 
@@ -36,70 +38,107 @@ ChartJS.register(CategoryScale,
   Title,
   Tooltip,
   Legend,
-  Filler
+  Filler,
+  // possible cite for registering something ... can't remember what - https://react-chartjs-2.js.org/faq/registered-scale
+  // another possible cite for registering stuff and showing faker package (might use in future) - https://codesandbox.io/s/github/reactchartjs/react-chartjs-2/tree/master/sandboxes/bar/vertical?from-embed=&file=/App.tsx
+  // https://stackoverflow.com/a/67727684/17712310
+  ChartJSPluginAnnotations
 )
-
-const lineChartOptions = {
-  responsive: true,
-  plugins: {
-    legend: {
-      // https://stackoverflow.com/a/38212833/17712310
-      display: false,
-      position: 'top'
-    },
-    title: {
-      display: false
-    },
-  },
-  // https://github.com/reactchartjs/react-chartjs-2/issues/61#issuecomment-633633803
-  maintainAspectRatio: false,
-  layout: {
-    padding: 0
-  },
-  elements: {
-    point: {
-      pointStyle: 'circle',
-      radius: 3,
-      backgroundColor: "#fff",
-      borderColor: "#fff"
-    },
-
-    line: {
-      tension: 0,
-      borderWidth: 3
-    }
-  },
-
-  scales: {
-    x: {
-        ticks: {
-        padding: 10
-      }
-    },
-    y: {
-      ticks: {
-        padding: 10
-      },
-      // maybe cite - https://stackoverflow.com/questions/41216308/chartjs-how-to-set-fixed-y-axis-max-and-min
-      // maybe cite - https://stackoverflow.com/questions/28990708/how-to-set-max-and-min-value-for-y-axis
-      // max: 500000
-  }
-  }
-}
 
 
 
 const salaryDefault = 48000
 const minSalaryChange = -10
 const maxSalaryChange = 100
-const mainWrapperWidth = 450
 
 
 export default function Home() {
 
+  const [graphCriteriaMatchHighlightConfigs, graphCriteriaMatchHighlightConfigsSetter] = useState([])
+
+
+  const lineChartOptions = {
+    responsive: true,
+    plugins: {
+      legend: {
+        // https://stackoverflow.com/a/38212833/17712310
+        display: false,
+        position: 'top'
+      },
+      title: {
+        display: false
+      },
+  
+      // https://stackoverflow.com/a/47108487/17712310
+      // possible cite - https://stackoverflow.com/questions/36685745/acceptable-range-highlighting-of-background-in-chart-js-2-0
+      // https://www.chartjs.org/chartjs-plugin-annotation/latest/guide/types/box.html
+      annotation: {
+        annotations: graphCriteriaMatchHighlightConfigs
+      }
+    },
+    // https://github.com/reactchartjs/react-chartjs-2/issues/61#issuecomment-633633803
+    maintainAspectRatio: false,
+    layout: {
+      padding: 0
+    },
+    elements: {
+      point: {
+        pointStyle: 'circle',
+        radius: 3,
+        backgroundColor: "#fff",
+        borderColor: "#fff"
+      },
+  
+      line: {
+        tension: 0,
+        borderWidth: 3
+      }
+    },
+  
+    scales: {
+      x: {
+          ticks: {
+          padding: 10
+        }
+      },
+      y: {
+        ticks: {
+          padding: 10
+        },
+        // maybe cite - https://stackoverflow.com/questions/41216308/chartjs-how-to-set-fixed-y-axis-max-and-min
+        // maybe cite - https://stackoverflow.com/questions/28990708/how-to-set-max-and-min-value-for-y-axis
+        // max: 500000
+    }
+    }
+  }
+
+
+
   const [graphOptions, graphOptionsSetter] = useState(lineChartOptions)
 
   const graphOptionsRef = useRef(graphOptions)
+
+
+
+  useEffect(() => {
+    // graphCriteriaMatchHighlightConfigs changed -> so apply the changes
+
+    // https://blog.logrocket.com/using-react-usestate-object/
+    // https://beta.reactjs.org/learn/updating-arrays-in-state
+    // https://stackoverflow.com/questions/55342406/updating-and-merging-state-object-using-react-usestate-hook
+    graphOptionsSetter(prevGraphOptions => (
+      {
+        ...prevGraphOptions,
+        plugins: {
+          annotation: {
+            annotations: [
+              ...graphCriteriaMatchHighlightConfigs
+            ]
+          }
+        }
+      }
+    ))
+  }, [graphCriteriaMatchHighlightConfigs])
 
   // keep graph options ref up to date
   useEffect(() => {
@@ -137,12 +176,6 @@ export default function Home() {
 
   const [showingDisclaimerCard, showingDisclaimerCardSetter] = useState(true)
   const [hoveringDisclaimerCloseBtn, hoveringDisclaimerCloseBtnSetter] = useState(false)
-
-
-  useEffect(() => {
-    console.log(`Graph options changed`)
-    console.log(graphOptions.scales.y)
-  }, [graphOptions])
 
 
   useEffect(() => {
@@ -266,7 +299,6 @@ export default function Home() {
     const loanPayPeriod = parseInt(loanPeriod)
 
     let mortgageData = netDataset.map(net => getBreakdown(loanAmount - (net * percentToPutDown), interestRate / 100, loanPayPeriod))
-    console.log(mortgageData)
     const interestPaidLine = {
       label: 'Interest Paid',
       data: mortgageData.map(data => data.interestPaid < 0 ? 0 : data.interestPaid),
@@ -302,15 +334,19 @@ export default function Home() {
     // calc acceptable interest paid date range
     let acceptableInterestRanges = calcInterestRange(useRelativeMaxInterest ? relativeMaxInterest : maxInterestPaid, interestPaidLine.data, datesForXAxis, mortgageData.map(data => data.total), useRelativeMaxInterest)
 
-    console.log('test')
-    console.log(acceptableInterestRanges)
 
     let acceptableRangesIndexes = acceptableInterestRanges.map(dateRange => {
       return [datesForXAxis.findIndex(date => date == dateRange[0]), datesForXAxis.findIndex(date => date == dateRange[1])]
     })
 
-    let rangeHighlightPlots = generateRangeHighlightData(datesForXAxis.map(date => date.toLocaleDateString()), acceptableRangesIndexes, newYMax)
-    datasetsToShow.push(rangeHighlightPlots)
+    // let rangeHighlightPlots = generateRangeHighlightData(datesForXAxis.map(date => date.toLocaleDateString()), acceptableRangesIndexes, newYMax)
+    // datasetsToShow.push(rangeHighlightPlots)
+
+    // criteria match background highlight
+    const bgHighlightConfigsToAdd = generateCriteriaMatchBackgroundConfigs(acceptableInterestRanges, datesForXAxis)
+
+
+    graphCriteriaMatchHighlightConfigsSetter(bgHighlightConfigsToAdd)
 
 
 

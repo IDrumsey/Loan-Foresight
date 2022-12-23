@@ -103,15 +103,9 @@ export const calcInterestRange = (interestPaidMax: number, interestPaidDataPoint
 
     let currStart = null
     for(let i = 0; i < dates.length; i++) {
-        console.log(`relative : ${relative}`)
-        console.log(`total loan amount : ${totalLoanAmountsWithoutInterest[i]}`)
-        console.log(`interestPaidDataPoints : ${interestPaidDataPoints[i]}`)
-        console.log(`relative max interest : ${totalLoanAmountsWithoutInterest[i] * interestPaidMax}`)
         // check if valid or invalid interest
         let validInterestPaid = interestPaidDataPoints[i] < (relative ? totalLoanAmountsWithoutInterest[i] * interestPaidMax : interestPaidMax)
 
-        console.log(`valid interest : ${validInterestPaid}`)
-        console.log(`curr start : ${currStart}`)
 
         // if valid -> check if currStart is set, if not -> set : otherwise continue to next data point
         if(validInterestPaid){
@@ -120,13 +114,11 @@ export const calcInterestRange = (interestPaidMax: number, interestPaidDataPoint
 
                 // if currstart is not valid and at end
                 if(i == dates.length - 1) {
-                    console.log('last date')
                     validRanges.push([dates[i], dates[i]])
                 }
             }
             else {
                 if(i == dates.length - 1) {
-                    console.log('last date')
                     validRanges.push([currStart, dates[i]])
                 }
                 continue
@@ -137,7 +129,6 @@ export const calcInterestRange = (interestPaidMax: number, interestPaidDataPoint
         else {
             if(currStart){
                 // end the range
-                console.log('pushing')
                 validRanges.push([currStart, dates[i]])
                 currStart = null
             }
@@ -150,6 +141,54 @@ export const calcInterestRange = (interestPaidMax: number, interestPaidDataPoint
     // if all data points are valid -> catch this by checking end value validity
 
     return validRanges
+}
+
+
+
+const highlightMatchBgColor = 'rgba(11, 186, 119, 0.25)'
+
+export const generateCriteriaMatchBackgroundConfigs = (matchingDateRanges: [Date, Date][], xAxisData: Date[]) => {
+    /**
+     * Generate the configs for the plugin annotations to create the background rectangles that show the client the time ranges that match their criteria
+     * 
+     * 
+     * as per - https://www.chartjs.org/chartjs-plugin-annotation/latest/guide/types/box.html
+     * 
+     * returns {
+     *  criteriaBgHighlight1: {
+     *      type: 'box',
+     *      xMin: #,
+     *      xMax: #
+     *  },
+     * 
+     *  ...
+     * }
+     */
+
+    // for each matching range - find the start index and end index in the xAxisData and create the box config from that
+
+    const bgHighlightConfigs = []
+
+    matchingDateRanges.forEach(validRange => {
+        const validRangeXAxisStartIndex = xAxisData.findIndex(date => date == validRange[0])
+        if(validRangeXAxisStartIndex == -1) throw Error('Could not find start date on x axis')
+        const validRangeXAxisEndIndex = xAxisData.findIndex(date => date == validRange[1])
+        if(validRangeXAxisEndIndex == -1) throw Error('Could not find end date on x axis')
+
+        // https://stackoverflow.com/a/47108487/17712310
+        // possible cite - https://stackoverflow.com/questions/36685745/acceptable-range-highlighting-of-background-in-chart-js-2-0
+        // https://www.chartjs.org/chartjs-plugin-annotation/latest/guide/types/box.html
+        bgHighlightConfigs.push({
+            type: 'box',
+            xMin: validRangeXAxisStartIndex,
+            xMax: validRangeXAxisEndIndex,
+            backgroundColor: highlightMatchBgColor,
+            borderWidth: 0
+        })
+    })
+
+    return bgHighlightConfigs
+
 }
 
 

@@ -34,6 +34,3 @@ export const getBreakdown = (loanAmount, interestRate, loanPayPeriod = 15) => {
 const principle = 300000
 const rate = 0.05
 const loanYears = 30
-
-
-console.log(getBreakdown(principle, rate, loanYears))
