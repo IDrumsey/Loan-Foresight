@@ -54,13 +54,6 @@ export default function Home() {
 
 
 
-
-
-
-
-
-
-
   // when income configurations change -> recalculate the income forecast
   useEffect(() => {
     state.updateDates()
@@ -106,7 +99,7 @@ export default function Home() {
     state.updateLoanDatapoints()
   }, [
     state.config.graph.intervalLength,
-    state.config.graph.numIntervalsInFutureToProject
+    state.config.graph.numMonthsInFutureToProject
   ])
 
 
@@ -201,8 +194,8 @@ export default function Home() {
           columnGap: '5px'
         }}>
           {/* https://nextjs.org/docs/api-reference/next/link#if-the-child-is-a-tag */}
-          <Link href="/releases" legacyBehavior>
-            <a id="releases-link">Releases</a>
+          <Link id="releases-link" href="/releases" legacyBehavior>
+            Releases
           </Link>
         </div>
       </div>

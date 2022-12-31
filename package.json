@@ -20,10 +20,10 @@
     "chartjs-plugin-annotation": "^2.1.0",
     "date-fns": "^2.29.3",
     "dayjs": "^1.11.6",
-    "next": "12.3.1",
-    "react": "18.2.0",
+    "next": "^13.1.1",
+    "react": "^18.2.0",
     "react-chartjs-2": "^4.3.1",
-    "react-dom": "18.2.0",
+    "react-dom": "^18.2.0",
     "react-icons": "^4.6.0",
     "sass": "^1.56.2",
     "zustand": "^4.1.5"
@@ -32,6 +32,6 @@
     "@types/node": "18.11.7",
     "@types/react": "18.0.23",
     "eslint": "8.26.0",
-    "eslint-config-next": "12.3.1"
+    "eslint-config-next": "^13.1.1"
   }
 }

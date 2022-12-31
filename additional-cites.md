@@ -61,3 +61,14 @@ cleanup -
 
 
 - using parseInt to convert string to int - https://dev.to/sanchithasr/7-ways-to-convert-a-string-to-number-in-javascript-4l
+
+
+- identifying dependency routes
+    - using npm ls
+        - https://stackoverflow.com/a/31924252/17712310
+        - https://docs.npmjs.com/cli/v7/commands/npm-ls
+
+
+- upgrading to Next.js 13
+    - https://nextjs.org/docs/upgrading
+    - breaking changes - https://nextjs.org/blog/next-13

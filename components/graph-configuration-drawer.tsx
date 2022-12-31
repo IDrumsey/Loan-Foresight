@@ -110,9 +110,9 @@ const GraphConfigDrawer = ({
                         {/* https://mantine.dev/core/slider/ */}
                         <Text size="sm" weight={500} style={{marginBottom: 10}}>Months in the future</Text>
                         <Slider
-                        value={state.config.graph.intervalLength == 'month' ? state.config.graph.numIntervalsInFutureToProject : state.config.graph.numIntervalsInFutureToProject * 12}
+                        value={state.config.graph.numMonthsInFutureToProject}
                         onChange={(newNum) => {
-                            state.updateNumIntervalsInFutureToProject(newNum)
+                            state.updateNumMonthsInFutureToProject(newNum)
                         }}
                         marks={[
                             {value: 0, label: '0'},
@@ -127,9 +127,10 @@ const GraphConfigDrawer = ({
 
                         <Text size="sm" weight={500} style={{marginBottom: 10}}>Years in the future</Text>
                         <Slider
-                        value={state.config.graph.intervalLength == 'year' ? state.config.graph.numIntervalsInFutureToProject : state.config.graph.numIntervalsInFutureToProject / 12}
+                        // https://stackoverflow.com/a/15762794/17712310
+                        value={(state.config.graph.numMonthsInFutureToProject / 12).toFixed(2)}
                         onChange={(newNum) => {
-                            state.updateNumIntervalsInFutureToProject(newNum)
+                            state.updateNumMonthsInFutureToProject(newNum * 12)
                         }}
                         marks={[
                             {value: 0, label: '0'},

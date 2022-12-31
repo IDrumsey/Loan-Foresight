@@ -117,8 +117,7 @@ const ForesightGraph = ({}: Props) => {
       return {
         label: 'Total Loan Cost',
         // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map
-        // using filter - https://stackoverflow.com/a/24806827/17712310
-        data: state.loanForecastDatapoints.filter(datapoint => datapoint.data.total >= 0).map(loanDatapoint => loanDatapoint.data.total),
+        data: state.loanForecastDatapoints.map(loanDatapoint => loanDatapoint.data.total > 0 ? loanDatapoint.data.total : 0),
         borderColor: '#ede161',
         // https://codesandbox.io/s/github/reactchartjs/react-chartjs-2/tree/master/sandboxes/line/area?from-embed=&file=/App.tsx
         fill: true,
@@ -264,7 +263,7 @@ const ForesightGraph = ({}: Props) => {
       state.config.graph.showExpensesLine,
       state.config.graph.combineIncomeAndExpenses,
       state.config.graph.intervalLength,
-      state.config.graph.numIntervalsInFutureToProject,
+      state.config.graph.numMonthsInFutureToProject,
       state.config.graph.showInterestPaidPerInterval,
     ])
 

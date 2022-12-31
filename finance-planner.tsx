@@ -51,12 +51,18 @@ export const calcProjectedNets = (baseNet: number, annualSalary: number, expecte
 
 
 
-export const generateDates = (xAxisGranularity: 'month' | 'year', xAxisMax: Number) => {
+export const generateDates = (xAxisGranularity: 'month' | 'year', numMonthsToProject: number) => {
     let prevDate = new Date()
 
     let dates: Date[] = [prevDate]
 
-    for(let i = 0; i < xAxisMax; i++) {
+    let iCap = numMonthsToProject
+
+    if(xAxisGranularity == 'year') {
+        iCap = Math.floor(iCap / 12)
+    }
+
+    for(let i = 0; i < iCap; i++) {
         let dateInstance = new Date(prevDate)
 
         // add time

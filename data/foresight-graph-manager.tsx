@@ -6,9 +6,10 @@ import { getBreakdown } from '../mortgage'
 // using zustand with ts - https://github.com/pmndrs/zustand#typescript-usage
 // https://github.com/pmndrs/zustand/blob/main/docs/guides/typescript.md#basic-usage
 // possible cite for using zustand - https://youtu.be/sqTPGMipjHk
-// and another possible cite for using zustand - https://youtu.be/jLcF0Az1nx8
+// and another possible cite for using zustand and debugging with redux devtools - https://youtu.be/jLcF0Az1nx8
 
 import create from 'zustand'
+// import { devtools } from 'zustand/middleware'
 
 
 
@@ -76,7 +77,7 @@ interface IForesightGraphConfig {
     showExpensesLine: boolean
     combineIncomeAndExpenses: boolean
     intervalLength: graphIntervalLength
-    numIntervalsInFutureToProject: number
+    numMonthsInFutureToProject: number
     showInterestPaidPerInterval: boolean
 }
 
@@ -132,7 +133,7 @@ export interface IForesightState {
     updateShowExpensesLine: (showExpensesLine: boolean) => void
     updateCombineIncomeAndExpenses: (combineIncomeAndExpensesLine: boolean) => void
     updateIntervalLength: (newIntervalLength: graphIntervalLength) => void
-    updateNumIntervalsInFutureToProject: (intervalsToProjectInFuture: number) => void
+    updateNumMonthsInFutureToProject: (monthsToProjectInFuture: number) => void
     updateShowInterestPaidPerInterval: (showInterestPaidPerInterval: boolean) => void
 
     updatePeriod: (newPeriod: loanPeriodType) => void
@@ -193,7 +194,7 @@ const useForesightState = create<IForesightState>()((set) => ({
 
         graph: {
             intervalLength: 'month',
-            numIntervalsInFutureToProject: 12,
+            numMonthsInFutureToProject: 12,
             showIncomeLine: true,
             showExpensesLine: true,
             combineIncomeAndExpenses: false,
@@ -231,7 +232,7 @@ const useForesightState = create<IForesightState>()((set) => ({
          * Generates the income data based on the dates array
          */
 
-        let numMonthsToProject = this.config.graph.numIntervalsInFutureToProject
+        let numMonthsToProject = this.config.graph.numMonthsInFutureToProject
 
         // if projecting in years -> convert to months
         if(this.config.graph.intervalLength == 'year') {
@@ -253,7 +254,7 @@ const useForesightState = create<IForesightState>()((set) => ({
 
         let expenses = [0]
   
-        for(let i = 0; i < this.config.graph.numIntervalsInFutureToProject; i++) {
+        for(let i = 0; i < this.config.graph.numMonthsInFutureToProject; i++) {
             expenses.push(this.config.expenses.expensesPerPeriod * (i + 1))
         }
 
@@ -268,7 +269,8 @@ const useForesightState = create<IForesightState>()((set) => ({
 
 
     updateDates: () => set(state => {
-        const dates = state.genDates(state.config.graph.intervalLength, state.config.graph.numIntervalsInFutureToProject)
+        const dates = state.genDates(state.config.graph.intervalLength, state.config.graph.numMonthsInFutureToProject)
+
 
         return {
             ...state,
@@ -445,14 +447,14 @@ const useForesightState = create<IForesightState>()((set) => ({
 
 
 
-    updateNumIntervalsInFutureToProject: (intervalsToProjectInFuture: number) => {
+    updateNumMonthsInFutureToProject: (intervalsToProjectInFuture: number) => {
         set(state => ({
             ...state,
             config: {
                 ...state.config,
                 graph: {
                     ...state.config.graph,
-                    numIntervalsInFutureToProject: intervalsToProjectInFuture
+                    numMonthsInFutureToProject: intervalsToProjectInFuture
                 }
             }
         }))
