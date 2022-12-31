@@ -1,16 +1,14 @@
 import {Text, Divider, SegmentedControl, TextInput} from '@mantine/core'
 
+import useForesightState, {incomeTypeType} from '../data/foresight-graph-manager'
+
 // https://www.typescriptlang.org/docs/handbook/2/functions.html
 const IncomeForm = ({
-    triggerUpdateGraph,
-    incomeTypeControl, 
-    incomeTypeControlSetter,
-    currentNetWorthControl,
-    currentNetWorthControlSetter,
-
     salaryForm,
     hourlyForm
 }) => {
+
+    const state = useForesightState()
     
     return (
         <>
@@ -22,8 +20,9 @@ const IncomeForm = ({
 
             {/* https://mantine.dev/core/segmented-control/ */}
             <SegmentedControl
-                value={incomeTypeControl}
-                onChange={incomeTypeControlSetter}
+                value={state.config.income.incomeType}
+                // https://stackoverflow.com/a/37978675/17712310
+                onChange={newVal => state.updateIncomeType(newVal as incomeTypeType)}
                 data={[
                   // https://mantine.dev/core/segmented-control/#disabled
                 {label: 'Hourly', 'value': 'hourly', disabled: true},
@@ -38,9 +37,9 @@ const IncomeForm = ({
 
             <TextInput
               type='number'
-              value={currentNetWorthControl}
+              value={state.config.income.netWorth}
               label='Current net worth'
-              onChange={(event) => currentNetWorthControlSetter(event.currentTarget.value)}
+              onChange={(event) => state.updateNetWorth(parseInt(event.currentTarget.value))}
               sx={{
                 width: '30%'
               }}
@@ -48,19 +47,16 @@ const IncomeForm = ({
               style={{
                 marginBottom: 25
               }}
-              onBlur={() => {
-                triggerUpdateGraph()
-              }}
             />
 
             {/* income inputs based on income type */}
 
             {
-                incomeTypeControl == 'hourly' && hourlyForm
+                state.config.income.incomeType == 'hourly' && hourlyForm
             }
 
             {
-                incomeTypeControl == 'salary' && salaryForm
+                state.config.income.incomeType == 'salary' && salaryForm
             }
         </>
     )

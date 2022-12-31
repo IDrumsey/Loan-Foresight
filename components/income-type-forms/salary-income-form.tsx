@@ -1,15 +1,14 @@
 import {TextInput, Space, Text, Slider, NativeSelect} from '@mantine/core'
 import {useEffect} from 'react'
 
+import useForesightState from '../../data/foresight-graph-manager'
+
 const SalaryIncomeForm = ({
-    triggerUpdateGraph,
-    salaryControl,
-    salaryControlSetter,
-    expectedSalaryChange,
-    expectedSalaryChangeSetter,
     minSalaryChange,
     maxSalaryChange
 }) => {
+
+    const state = useForesightState()
     
     
     return (
@@ -18,18 +17,15 @@ const SalaryIncomeForm = ({
             {/* https://mantine.dev/core/text-input/#controlled */}
             <TextInput
             type='number'
-            value={salaryControl}
+            value={state.config.income.salary == 0 ? '' : state.config.income.salary}
             label='Current Salary'
-            onChange={(event) => salaryControlSetter(event.currentTarget.value)}
+            onChange={(event) => state.updateSalary(event.currentTarget.value == '' ? 0 : parseInt(event.currentTarget.value))}
             rightSection={incomeCurrencySelector}
             rightSectionWidth={92}
             sx={{
                 width: '60%'
             }}
             styles={{ label: {marginBottom: 10}}}
-            onBlur={() => {
-                triggerUpdateGraph()
-            }}
             />
             
             <Space h="xl"/>
@@ -37,8 +33,8 @@ const SalaryIncomeForm = ({
             <Text size="sm" weight={500} style={{marginBottom: 10}}>Expected Average Annual Salary Change</Text>
             {/* https://mantine.dev/core/slider/ */}
             <Slider
-                value={expectedSalaryChange}
-                onChange={expectedSalaryChangeSetter}
+                value={state.config.income.expectedSalaryChangePerYear}
+                onChange={state.updateExpectedSalaryChangePerYear}
                 styles={{
                     track: {
                     bar: "#fff"

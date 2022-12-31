@@ -1,5 +1,6 @@
 import {Radio, TextInput, NativeSelect} from '@mantine/core'
-import {useState} from 'react'
+
+import useForesightState, {expenseIntervalLength} from '../../data/foresight-graph-manager'
 
 // https://ui.mantine.dev/category/inputs#currency-input
 const expenseTypeSelector = (
@@ -18,20 +19,17 @@ const expenseTypeSelector = (
 />
 )
 
-const CondensedExpenseForm = ({
-    condensedExpenseInputGranularity,
-    condensedExpenseInputGranularitySetter,
-    expensesPerPeriod,
-    expensesPerPeriodSetter,
-    triggerGraphChange
-}) => {
+const CondensedExpenseForm = ({}) => {
+
+
+    const state = useForesightState()
 
 
     return (
         <>
         <Radio.Group
-            value={condensedExpenseInputGranularity}
-            onChange={condensedExpenseInputGranularitySetter}
+            value={state.config.expenses.intervalLength}
+            onChange={newVal => state.updateCondensedExpensesIntervalLength(newVal as expenseIntervalLength)}
             sx={{
                 marginBottom: 10
             }}
@@ -44,20 +42,17 @@ const CondensedExpenseForm = ({
 
         <TextInput
         type='number'
-        value={expensesPerPeriod}
+        value={state.config.expenses.expensesPerPeriod}
         rightSection={expenseTypeSelector}
         rightSectionWidth={55}
-        label={`Expenses per ${condensedExpenseInputGranularity}`}
-        onChange={(event) => expensesPerPeriodSetter(event.currentTarget.value)}
+        label={`Expenses per ${state.config.expenses.intervalLength}`}
+        onChange={(event) => state.updateCondensedExpensesPerPeriod(parseInt(event.currentTarget.value))}
         sx={{
             width: '40%'
         }}
         styles={{ label: {marginBottom: 10}}}
         style={{
             marginBottom: 25
-        }}
-        onBlur={() => {
-            triggerGraphChange()
         }}
         />
         </>

@@ -1,42 +1,16 @@
 import {Drawer, Text, Divider, Radio, Slider, Group, Checkbox, SegmentedControl, TextInput, ScrollArea} from '@mantine/core'
 import {useState} from 'react'
+import useForesightState, { loanPeriodType } from '../data/foresight-graph-manager'
 
 const GraphConfigDrawer = ({
     isOpen,
-    isOpenSetter,
-    intervalTimeFrame,
-    intervalTimeFrameSetter,
-    numMonthsProjected,
-    numMonthsProjectedSetter,
-    numYearsProjected,
-    numYearsProjectedSetter,
-    showingIncome,
-    showingIncomeSetter,
-    showingExpenses,
-    showingExpensesSetter,
-    combineIncomeAndExpenses,
-    combineIncomeAndExpensesSetter,
-    loanPeriod,
-    loanPeriodSetter,
-    loanAmount,
-    loanAmountSetter,
-    maxInterestPaid,
-    maxInterestPaidSetter,
-    percentToPutDown,
-    percentToPutDownSetter,
-    interestRate,
-    interestRateSetter,
-    triggerUpdateGraph,
-    showInterestPaidPerYear,
-    showInterestPaidPerYearSetter,
-    useRelativeMaxInterest,
-    // https://stackoverflow.com/a/59465373/17712310
-    useRelativeMaxInterestSetter: usingRelativeMaxInterestSetter,
-    relativeMaxInterest,
-    relativeMaxInterestSetter
+    isOpenSetter
 }) => {
 
     const [configTab, configTabSetter] = useState('graph')
+
+
+    const state = useForesightState()
 
     return (
         <>
@@ -82,16 +56,16 @@ const GraphConfigDrawer = ({
                         >
                             {/* https://mantine.dev/core/checkbox/#controlled */}
                             <Checkbox
-                                checked={showingIncome}
-                                onChange={e => showingIncomeSetter(e.target.checked)}
+                                checked={state.config.graph.showIncomeLine}
+                                onChange={e => state.updateShowIncomeLine(e.target.checked)}
                                 value="income"
                                 label="Income"
                                 color="blue"
                                 labelPosition="right"
                             />
                             <Checkbox
-                                checked={showingExpenses}
-                                onChange={e => showingExpensesSetter(e.target.checked)}
+                                checked={state.config.graph.showExpensesLine}
+                                onChange={e => state.updateShowExpensesLine(e.target.checked)}
                                 value="expenses"
                                 label="Expenses"
                                 color="blue"
@@ -101,14 +75,14 @@ const GraphConfigDrawer = ({
 
 
                         {
-                            showingIncome && showingExpenses &&
+                            state.config.graph.showIncomeLine && state.config.graph.showExpensesLine &&
 
                             <Checkbox
                                 sx={{
                                     marginBottom: 50
                                 }}
-                                checked={combineIncomeAndExpenses}
-                                onChange={e => combineIncomeAndExpensesSetter(e.target.checked)}
+                                checked={state.config.graph.combineIncomeAndExpenses}
+                                onChange={e => state.updateCombineIncomeAndExpenses(e.target.checked)}
                                 value="net worth"
                                 label="Combine income and expenses"
                                 color="blue"
@@ -120,8 +94,8 @@ const GraphConfigDrawer = ({
 
                         {/* https://mantine.dev/core/checkbox/#controlled-checkboxgroup */}
                         <Radio.Group
-                        value={intervalTimeFrame}
-                        onChange={intervalTimeFrameSetter}
+                        value={state.config.graph.intervalLength == 'month' ? 'months' : 'years'}
+                        onChange={(newVal) => state.updateIntervalLength(newVal == 'months' ? 'month' : 'year')}
                         sx={{
                             marginBottom: 10
                         }}
@@ -136,10 +110,9 @@ const GraphConfigDrawer = ({
                         {/* https://mantine.dev/core/slider/ */}
                         <Text size="sm" weight={500} style={{marginBottom: 10}}>Months in the future</Text>
                         <Slider
-                        value={numMonthsProjected}
+                        value={state.config.graph.intervalLength == 'month' ? state.config.graph.numIntervalsInFutureToProject : state.config.graph.numIntervalsInFutureToProject * 12}
                         onChange={(newNum) => {
-                            numMonthsProjectedSetter(newNum)
-                            numYearsProjectedSetter(newNum / 12)
+                            state.updateNumIntervalsInFutureToProject(newNum)
                         }}
                         marks={[
                             {value: 0, label: '0'},
@@ -154,10 +127,9 @@ const GraphConfigDrawer = ({
 
                         <Text size="sm" weight={500} style={{marginBottom: 10}}>Years in the future</Text>
                         <Slider
-                        value={numYearsProjected}
+                        value={state.config.graph.intervalLength == 'year' ? state.config.graph.numIntervalsInFutureToProject : state.config.graph.numIntervalsInFutureToProject / 12}
                         onChange={(newNum) => {
-                            numYearsProjectedSetter(newNum)
-                            numMonthsProjectedSetter(newNum * 12)
+                            state.updateNumIntervalsInFutureToProject(newNum)
                         }}
                         marks={[
                             {value: 0, label: '0'},
@@ -174,8 +146,8 @@ const GraphConfigDrawer = ({
                             sx={{
                                 marginBottom: 200
                             }}
-                            checked={showInterestPaidPerYear}
-                            onChange={e => showInterestPaidPerYearSetter(e.target.checked)}
+                            checked={state.config.graph.showInterestPaidPerInterval}
+                            onChange={e => state.updateShowInterestPaidPerInterval(e.target.checked)}
                             value="show interest paid per year"
                             label="Show interest paid per year"
                             color="blue"
@@ -193,8 +165,11 @@ const GraphConfigDrawer = ({
                         {/* https://mantine.dev/core/radio/#controlled-radiogroup */}
                         <Radio.Group
                             orientation='horizontal'
-                            value={loanPeriod}
-                            onChange={loanPeriodSetter}
+                            value={state.config.loan.period.toString()}
+                            onChange={newVal => {
+                                const newNum = parseInt(newVal)
+                                state.updatePeriod(newNum as loanPeriodType)
+                            }}
                         >
                             <Radio value='10' label='10' />
                             <Radio value='15' label='15' />
@@ -205,8 +180,8 @@ const GraphConfigDrawer = ({
                         <h4>Loan Amount</h4>
                         <TextInput
                             type='number'
-                            value={loanAmount}
-                            onChange={(event) => loanAmountSetter(event.currentTarget.value)}
+                            value={state.config.loan.loanAmount}
+                            onChange={(event) => state.updateLoanAmount(parseInt(event.currentTarget.value))}
                             sx={{
                                 width: '50%'
                             }}
@@ -214,20 +189,17 @@ const GraphConfigDrawer = ({
                             style={{
                                 marginBottom: 25
                             }}
-                            onBlur={() => {
-                                triggerUpdateGraph()
-                            }}
                         />
 
                         {/* Max Interest Paid */}
                         <h4>Max Interest Paid</h4>
 
                         {
-                            useRelativeMaxInterest ? 
+                            state.filters.useRelativeMaxTotalInterestPaid ? 
 
                             <Slider
-                                value={relativeMaxInterest}
-                                onChange={relativeMaxInterestSetter}
+                                value={state.filters.relativeMaxTotalInterestPaid}
+                                onChange={newVal => state.updateRelativeMaxTotalInterestPaid(newVal)}
                                 marks={[
                                     {value: 0, label: '0'},
                                     {value: 1, label: '1'}
@@ -244,17 +216,14 @@ const GraphConfigDrawer = ({
 
                             <TextInput
                                 type='number'
-                                value={maxInterestPaid}
-                                onChange={(event) => maxInterestPaidSetter(event.currentTarget.value)}
+                                value={state.filters.absoluteMaxTotalInterestPaid}
+                                onChange={(event) => state.updateAbsoluteMaxTotalInterestPaid(parseInt(event.currentTarget.value))}
                                 sx={{
                                     width: '50%'
                                 }}
                                 styles={{ label: {marginBottom: 10}}}
                                 style={{
                                     marginBottom: 25
-                                }}
-                                onBlur={() => {
-                                    triggerUpdateGraph()
                                 }}
                             />
                         }
@@ -264,8 +233,8 @@ const GraphConfigDrawer = ({
                             sx={{
                                 marginBottom: 50
                             }}
-                            checked={useRelativeMaxInterest}
-                            onChange={e => usingRelativeMaxInterestSetter(e.target.checked)}
+                            checked={state.filters.useRelativeMaxTotalInterestPaid}
+                            onChange={e => state.updateUseRelativeMaxTotalInterestPaid(e.target.checked)}
                             value="useRelativeInterestMax"
                             label="Relative to total loan amount?"
                             color="blue"
@@ -275,8 +244,8 @@ const GraphConfigDrawer = ({
                         <h4>Amount to put down from net worth (%)</h4>
                         {/* https://mantine.dev/core/slider/ */}
                         <Slider
-                            value={percentToPutDown}
-                            onChange={percentToPutDownSetter}
+                            value={state.config.loan.relativeDownPayment}
+                            onChange={newVal => state.updateRelativeDownPayment(newVal)}
                             marks={[
                                 {value: 0, label: '0'},
                                 {value: 1, label: '1'}
@@ -292,8 +261,8 @@ const GraphConfigDrawer = ({
                         <h4>Interest Rate (%)</h4>
                         {/* https://mantine.dev/core/slider/ */}
                         <Slider
-                            value={interestRate}
-                            onChange={interestRateSetter}
+                            value={state.config.loan.interestRate}
+                            onChange={newVal => state.updateInterestRate(newVal)}
                             marks={[
                                 {value: 0, label: '0'},
                                 {value: 100, label: '100'}

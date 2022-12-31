@@ -12,3 +12,52 @@
 
 - Fix for v1.0.0 deployment
     - https://github.blog/changelog/2021-02-17-github-actions-limit-which-branches-can-deploy-to-an-environment/
+
+
+
+
+
+
+cleanup - 
+
+- useCallback
+    - https://stackoverflow.com/a/64896990/17712310
+    - https://stackoverflow.com/a/62601621/17712310
+
+
+- resolving an error - https://stackoverflow.com/a/70033156/17712310
+
+
+- Math.max function - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/max
+
+
+- Setting a dynamic y max for the graph
+    - https://stackoverflow.com/a/66625012
+    - setting the y max - https://stackoverflow.com/a/35553748/17712310
+
+- Possible cite - learning about state immutability - https://youtu.be/-hi-QQHWlHg
+
+
+- Working with state in react
+    - https://reacttraining.com/blog/how-to-use-and-not-use-state/
+    - https://blog.logrocket.com/using-react-usestate-object/
+    - https://beta.reactjs.org/learn/updating-arrays-in-state
+    - https://stackoverflow.com/questions/55342406/updating-and-merging-state-object-using-react-usestate-hook
+    - updating nested state - https://stackoverflow.com/questions/56802815/react-hooks-how-do-i-update-state-on-a-nested-object-with-usestate
+    - updating nested state - https://bobbyhadz.com/blog/react-update-nested-state-object-property
+
+
+
+- bug fix for naming state variable setter - https://stackoverflow.com/a/59465373/17712310
+
+- passing prop from parent to child where variable in parent has same name as prop in child
+    - https://stackoverflow.com/a/51148917
+
+
+- typescript docstrings param and return - https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html#param-and-returns
+
+
+- tracking state variables in useEffect - https://bobbyhadz.com/blog/react-listen-to-state-change#:~:text=Use%20the%20useEffect%20hook%20to,time%20the%20state%20variables%20change.
+
+
+- using parseInt to convert string to int - https://dev.to/sanchithasr/7-ways-to-convert-a-string-to-number-in-javascript-4l

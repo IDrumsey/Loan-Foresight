@@ -1,6 +1,6 @@
 
 
-export const calcProjectedNets = (baseNet: number, annualSalary: number, expectedAnnualSalaryIncrease: number, numMonthsToProject = 12, granularity: 'months' | 'years') => {
+export const calcProjectedNets = (baseNet: number, annualSalary: number, expectedAnnualSalaryIncrease: number, numMonthsToProject = 12, granularity: 'month' | 'year') => {
     // https://stackoverflow.com/a/23072573/17712310
     // https://tsdoc.org/
     /**
@@ -13,7 +13,7 @@ export const calcProjectedNets = (baseNet: number, annualSalary: number, expecte
 
     let maxTimeIncrementNum = numMonthsToProject
 
-    if(granularity == 'years'){
+    if(granularity == 'year'){
         maxTimeIncrementNum = numMonthsToProject / 12
     }
 
@@ -31,13 +31,14 @@ export const calcProjectedNets = (baseNet: number, annualSalary: number, expecte
     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Loops_and_iteration
     for(let i = 1; i <= maxTimeIncrementNum; i++) {
         
-        currWorth = currWorth += granularity == 'years' ? expectedSalary : expectedSalary / 12
+        const amountToAdd = granularity == 'year' ? expectedSalary : expectedSalary / 12
+        currWorth += amountToAdd
 
         expectedNetWorth.push({
             expected: currWorth
         })
 
-        if(granularity == 'years' || (granularity == 'months' && i % 12 == 0)){
+        if(granularity == 'year' || (granularity == 'month' && i % 12 == 0)){
             let amountToIncreaseSalaryBy = expectedSalary * expectedAnnualSalaryIncrease
             expectedSalary += amountToIncreaseSalaryBy
         }
@@ -50,7 +51,7 @@ export const calcProjectedNets = (baseNet: number, annualSalary: number, expecte
 
 
 
-export const generateDates = (xAxisGranularity: 'months' | 'years', xAxisMax: Number) => {
+export const generateDates = (xAxisGranularity: 'month' | 'year', xAxisMax: Number) => {
     let prevDate = new Date()
 
     let dates: Date[] = [prevDate]
@@ -60,12 +61,12 @@ export const generateDates = (xAxisGranularity: 'months' | 'years', xAxisMax: Nu
 
         // add time
         switch(xAxisGranularity) {
-            case 'years': {
+            case 'year': {
                 // https://codingbeautydev.com/blog/javascript-add-years-to-date/
                 dateInstance.setFullYear(prevDate.getFullYear() + 1)
                 break
             }
-            case 'months': {
+            case 'month': {
                 dateInstance.setMonth(prevDate.getMonth() + 1)
                 break
             }
@@ -147,7 +148,7 @@ export const calcInterestRange = (interestPaidMax: number, interestPaidDataPoint
 
 const highlightMatchBgColor = 'rgba(11, 186, 119, 0.25)'
 
-export const generateCriteriaMatchBackgroundConfigs = (matchingDateRanges: [Date, Date][], xAxisData: Date[]) => {
+export const generateCriteriaMatchBackgroundConfigs = (matchingDateRanges: [Date, Date][], xAxisDates: Date[]) => {
     /**
      * Generate the configs for the plugin annotations to create the background rectangles that show the client the time ranges that match their criteria
      * 
@@ -170,9 +171,9 @@ export const generateCriteriaMatchBackgroundConfigs = (matchingDateRanges: [Date
     const bgHighlightConfigs = []
 
     matchingDateRanges.forEach(validRange => {
-        const validRangeXAxisStartIndex = xAxisData.findIndex(date => date == validRange[0])
+        const validRangeXAxisStartIndex = xAxisDates.findIndex(date => date == validRange[0])
         if(validRangeXAxisStartIndex == -1) throw Error('Could not find start date on x axis')
-        const validRangeXAxisEndIndex = xAxisData.findIndex(date => date == validRange[1])
+        const validRangeXAxisEndIndex = xAxisDates.findIndex(date => date == validRange[1])
         if(validRangeXAxisEndIndex == -1) throw Error('Could not find end date on x axis')
 
         // https://stackoverflow.com/a/47108487/17712310
@@ -208,6 +209,7 @@ export const generateRangeHighlightData = (xAxisDataPoints: any[], validRanges: 
         return datapoints
     })
 
+    // https://stackoverflow.com/a/10865042
     data = data.flat()
 
     return {

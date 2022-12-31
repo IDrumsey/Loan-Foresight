@@ -1,15 +1,12 @@
 import {Text, Divider, Radio, TextInput} from '@mantine/core'
 import CondensedExpenseForm from './expense-forms/condensed-expenses'
 
-const ExpenseForm = ({
-    formGranularity,
-    formGranularitySetter,
-    condensedExpenseInputGranularity,
-    condensedExpenseInputGranularitySetter,
-    expensesPerPeriod,
-    expensesPerPeriodSetter,
-    triggerGraphChange
-}) => {
+import useForesightState from '../data/foresight-graph-manager'
+
+const ExpenseForm = ({}) => {
+
+
+    const state = useForesightState()
 
     return (
         <>
@@ -18,8 +15,8 @@ const ExpenseForm = ({
 
             {/* Choose the granularity of how the client inputs expense parameters */}
             <Radio.Group
-              value={formGranularity}
-              onChange={formGranularitySetter}
+              value={state.config.expenses.breakdownExpensesByType ? 'granular' : 'combined'}
+              onChange={newVal => state.updateBreakdownExpensesByType(newVal == 'granular')}
               sx={{
                 marginBottom: 10
               }}
@@ -30,20 +27,9 @@ const ExpenseForm = ({
             </Radio.Group>
           
           {
-            formGranularity == 'combined' ? 
+            !state.config.expenses.breakdownExpensesByType ? 
             
-            <CondensedExpenseForm
-              // https://stackoverflow.com/a/51148917
-              {
-                ...{
-                  condensedExpenseInputGranularity,
-                  condensedExpenseInputGranularitySetter,
-                  expensesPerPeriod,
-                  expensesPerPeriodSetter,
-                  triggerGraphChange
-                }
-              }
-            />
+            <CondensedExpenseForm/>
 
             :
 
