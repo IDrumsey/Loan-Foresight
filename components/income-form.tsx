@@ -1,5 +1,7 @@
 import {Text, Divider, SegmentedControl, TextInput} from '@mantine/core'
 
+import { useState, useEffect } from 'react'
+
 import useForesightState, {incomeTypeType} from '../data/foresight-graph-manager'
 
 // https://www.typescriptlang.org/docs/handbook/2/functions.html
@@ -9,6 +11,19 @@ const IncomeForm = ({
 }) => {
 
     const state = useForesightState()
+
+
+
+    const [netWorth, netWorthSetter] = useState(state.config.income.netWorth.toString())
+
+
+    useEffect(() => {
+        state.updateNetWorth(netWorth == '' ? 0 : parseInt(netWorth))
+    }, [netWorth])
+
+
+
+
     
     return (
         <>
@@ -37,9 +52,9 @@ const IncomeForm = ({
 
             <TextInput
               type='number'
-              value={state.config.income.netWorth}
+              value={netWorth}
               label='Current net worth'
-              onChange={(event) => state.updateNetWorth(parseInt(event.currentTarget.value))}
+              onChange={(event) => netWorthSetter(event.currentTarget.value)}
               sx={{
                 width: '30%'
               }}
