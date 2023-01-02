@@ -586,7 +586,7 @@ const useForesightState = create<IForesightState>()((set) => ({
 
 
 
-    updateRelativeMaxTotalInterestPaid: (newAbsMaxInterestPaid: number) => {
+    updateAbsoluteMaxTotalInterestPaid: (newAbsMaxInterestPaid: number) => {
         set(state => ({
             ...state,
             filters: {
@@ -600,7 +600,7 @@ const useForesightState = create<IForesightState>()((set) => ({
 
 
 
-    updateAbsoluteMaxTotalInterestPaid: (newRelativeMaxInterestPaid: number) => {
+    updateRelativeMaxTotalInterestPaid: (newRelativeMaxInterestPaid: number) => {
         set(state => ({
             ...state,
             filters: {
