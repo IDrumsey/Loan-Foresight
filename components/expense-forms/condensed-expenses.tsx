@@ -27,7 +27,7 @@ const CondensedExpenseForm = ({}) => {
     const state = useForesightState()
 
 
-    const [expensePerMonthTextInputValue, expensePerMonthTextInputValueSetter] = useState(state.config.income.netWorth.toString())
+    const [expensePerMonthTextInputValue, expensePerMonthTextInputValueSetter] = useState(state.config.expenses.expensesPerPeriod.toString())
 
 
     useEffect(() => {

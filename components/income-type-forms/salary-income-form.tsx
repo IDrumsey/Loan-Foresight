@@ -12,7 +12,7 @@ const SalaryIncomeForm = ({
 
 
 
-    const [salaryTextInput, salaryTextInputSetter] = useState(state.config.income.netWorth.toString())
+    const [salaryTextInput, salaryTextInputSetter] = useState(state.config.income.salary.toString())
 
 
     useEffect(() => {
