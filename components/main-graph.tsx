@@ -69,13 +69,13 @@ const ForesightGraph = ({}: Props) => {
         // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map
         data: state.incomeForecastDatapoints.map(datapoint => datapoint.data),
 
-        borderColor: '#32a86f',
+        borderColor: state.config.graph.colors.incomeLine,
 
         // https://codesandbox.io/s/github/reactchartjs/react-chartjs-2/tree/master/sandboxes/line/area?from-embed=&file=/App.tsx
         fill: true,
 
         // https://www.digitalocean.com/community/tutorials/css-hex-code-colors-alpha-values
-        backgroundColor: '#32a86f14'
+        backgroundColor: state.config.graph.colors.incomeLine + '14'
       }
     }
 
@@ -86,11 +86,11 @@ const ForesightGraph = ({}: Props) => {
       return {
         label: 'Expenses',
         data: state.expenseForecastDatapoints.map(datapoint => datapoint.data),
-        borderColor: '#cf3a64',
+        borderColor: state.config.graph.colors.expenseLine,
         // https://codesandbox.io/s/github/reactchartjs/react-chartjs-2/tree/master/sandboxes/line/area?from-embed=&file=/App.tsx
         fill: true,
         // https://www.digitalocean.com/community/tutorials/css-hex-code-colors-alpha-values
-        backgroundColor: '#cf3a6414'
+        backgroundColor: state.config.graph.colors.expenseLine + '14'
       }
     }
 
@@ -118,11 +118,11 @@ const ForesightGraph = ({}: Props) => {
         label: 'Total Loan Cost',
         // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map
         data: state.loanForecastDatapoints.map(loanDatapoint => loanDatapoint.data.total > 0 ? loanDatapoint.data.total : 0),
-        borderColor: '#ede161',
+        borderColor: state.config.graph.colors.totalLoanCostLine,
         // https://codesandbox.io/s/github/reactchartjs/react-chartjs-2/tree/master/sandboxes/line/area?from-embed=&file=/App.tsx
         fill: true,
         // https://www.digitalocean.com/community/tutorials/css-hex-code-colors-alpha-values
-        backgroundColor: '#ede16114'
+        backgroundColor: state.config.graph.colors.totalLoanCostLine + '14'
       }
     }
 

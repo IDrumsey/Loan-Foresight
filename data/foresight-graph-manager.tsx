@@ -72,13 +72,23 @@ interface IUserExpensesConfig {
 
 
 
+
+interface IForesightGraphColorsConfig {
+    incomeLine: string,
+    expenseLine: string,
+    totalLoanCostLine: string
+}
+
+
+
 interface IForesightGraphConfig {
     showIncomeLine: boolean
     showExpensesLine: boolean
     combineIncomeAndExpenses: boolean
     intervalLength: graphIntervalLength
     numMonthsInFutureToProject: number
-    showInterestPaidPerInterval: boolean
+    showInterestPaidPerInterval: boolean,
+    colors: IForesightGraphColorsConfig
 }
 
 
@@ -198,7 +208,12 @@ const useForesightState = create<IForesightState>()((set) => ({
             showIncomeLine: true,
             showExpensesLine: true,
             combineIncomeAndExpenses: false,
-            showInterestPaidPerInterval: false
+            showInterestPaidPerInterval: false,
+            colors: {
+                incomeLine: '#32a86f',
+                expenseLine: '#cf3a64',
+                totalLoanCostLine: '#2f51ad'
+            }
         }
     },
 
