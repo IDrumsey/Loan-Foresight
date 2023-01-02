@@ -1,5 +1,5 @@
 import {Drawer, Text, Divider, Radio, Slider, Group, Checkbox, SegmentedControl, TextInput, ScrollArea} from '@mantine/core'
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
 import useForesightState, { loanPeriodType } from '../data/foresight-graph-manager'
 
 const GraphConfigDrawer = ({
@@ -11,6 +11,19 @@ const GraphConfigDrawer = ({
 
 
     const state = useForesightState()
+
+
+
+
+    const [loanAmountTextInputValue, loanAmountTextInputValueSetter] = useState(state.config.income.netWorth.toString())
+
+
+    useEffect(() => {
+        state.updateLoanAmount(loanAmountTextInputValue == '' ? 0 : parseInt(loanAmountTextInputValue))
+    }, [loanAmountTextInputValue])
+
+
+
 
     return (
         <>
@@ -181,8 +194,8 @@ const GraphConfigDrawer = ({
                         <h4>Loan Amount</h4>
                         <TextInput
                             type='number'
-                            value={state.config.loan.loanAmount}
-                            onChange={(event) => state.updateLoanAmount(parseInt(event.currentTarget.value))}
+                            value={loanAmountTextInputValue}
+                            onChange={(event) => loanAmountTextInputValueSetter(event.currentTarget.value)}
                             sx={{
                                 width: '50%'
                             }}
