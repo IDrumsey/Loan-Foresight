@@ -76,3 +76,10 @@ cleanup -
 
 
 - finding and picking a color lib to use - https://blog.shahednasser.com/7-javascript-color-libraries-and-which-should-you-choose/
+
+
+- recording screen - https://www.lifewire.com/record-screen-on-windows-11-5193849
+
+- trim video - https://www.howtogeek.com/839883/how-to-trim-a-video-on-windows-11/#:~:text=Right%2Dclick%20and%20select%20Open,in%20while%20cutting%20the%20rest.
+
+- cropping video - https://windowsreport.com/crop-video-windows-11/

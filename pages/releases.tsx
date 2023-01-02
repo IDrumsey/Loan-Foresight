@@ -55,6 +55,18 @@ const ReleasesPage = () => {
                                                 {
                                                     feature.desc && <p className={`${styles['feature-desc']}`}>{feature.desc}</p>
                                                 }
+
+                                                {feature.videoURLs?.map((videoURL, w) => {
+                                                    // loop - https://www.w3schools.com/tags/att_video_loop.asp
+                                                    // loop - https://www.geeksforgeeks.org/html-video-loop-attribute/
+                                                    return <video
+                                                                key={w}
+                                                                src={videoURL}
+                                                                autoPlay={true}
+                                                                loop={true}
+                                                                style={{width: '100%'}}
+                                                            />
+                                                })}
                                             </div>
                                         })
                                     }

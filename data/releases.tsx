@@ -14,6 +14,7 @@ export interface ReleaseSpecs {
 export interface ReleaseFeature {
     title: string
     desc?: string
+    videoURLs?: string[]
 }
 
 export interface ReleaseBugFix {
@@ -77,6 +78,24 @@ const releases: ReleaseSpecs[] = [
         features: [
             {
                 title: "Hotkey shortcut for opening and closing the configuration panel on the home page. Use ctrl-shift-c."
+            }
+        ],
+        bugFixes: []
+    },
+
+    {
+        major: 1,
+        minor: 2,
+        batch: 0,
+        beta: false,
+        releaseDate: new Date("1/2/2023"),
+        features: [
+            {
+                title: "Custom colors for graph lines",
+                desc: "Users can now define custom colors for the income, expense, and loan total cost lines.",
+                videoURLs: [
+                    "/release-1.2.0-video-1.mp4"
+                ]
             }
         ],
         bugFixes: []
