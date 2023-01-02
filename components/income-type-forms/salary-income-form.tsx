@@ -1,5 +1,5 @@
 import {TextInput, Space, Text, Slider, NativeSelect} from '@mantine/core'
-import {useEffect} from 'react'
+import {useEffect, useState} from 'react'
 
 import useForesightState from '../../data/foresight-graph-manager'
 
@@ -9,6 +9,15 @@ const SalaryIncomeForm = ({
 }) => {
 
     const state = useForesightState()
+
+
+
+    const [salaryTextInput, salaryTextInputSetter] = useState(state.config.income.netWorth.toString())
+
+
+    useEffect(() => {
+        state.updateSalary(salaryTextInput == '' ? 0 : parseInt(salaryTextInput))
+    }, [salaryTextInput])
     
     
     return (
@@ -17,9 +26,9 @@ const SalaryIncomeForm = ({
             {/* https://mantine.dev/core/text-input/#controlled */}
             <TextInput
             type='number'
-            value={state.config.income.salary == 0 ? '' : state.config.income.salary}
+            value={salaryTextInput}
             label='Current Salary'
-            onChange={(event) => state.updateSalary(event.currentTarget.value == '' ? 0 : parseInt(event.currentTarget.value))}
+            onChange={(event) => salaryTextInputSetter(event.currentTarget.value)}
             rightSection={incomeCurrencySelector}
             rightSectionWidth={92}
             sx={{
