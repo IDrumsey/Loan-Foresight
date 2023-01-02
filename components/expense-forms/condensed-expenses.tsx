@@ -1,5 +1,7 @@
 import {Radio, TextInput, NativeSelect} from '@mantine/core'
 
+import { useState, useEffect } from 'react'
+
 import useForesightState, {expenseIntervalLength} from '../../data/foresight-graph-manager'
 
 // https://ui.mantine.dev/category/inputs#currency-input
@@ -25,6 +27,14 @@ const CondensedExpenseForm = ({}) => {
     const state = useForesightState()
 
 
+    const [expensePerMonthTextInputValue, expensePerMonthTextInputValueSetter] = useState(state.config.income.netWorth.toString())
+
+
+    useEffect(() => {
+        state.updateCondensedExpensesPerPeriod(expensePerMonthTextInputValue == '' ? 0 : parseInt(expensePerMonthTextInputValue))
+    }, [expensePerMonthTextInputValue])
+
+
     return (
         <>
         <Radio.Group
@@ -42,11 +52,11 @@ const CondensedExpenseForm = ({}) => {
 
         <TextInput
         type='number'
-        value={state.config.expenses.expensesPerPeriod}
+        value={expensePerMonthTextInputValue}
         rightSection={expenseTypeSelector}
         rightSectionWidth={55}
         label={`Expenses per ${state.config.expenses.intervalLength}`}
-        onChange={(event) => state.updateCondensedExpensesPerPeriod(parseInt(event.currentTarget.value))}
+        onChange={(event) => expensePerMonthTextInputValueSetter(event.currentTarget.value)}
         sx={{
             width: '40%'
         }}
