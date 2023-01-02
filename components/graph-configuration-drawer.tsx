@@ -25,6 +25,16 @@ const GraphConfigDrawer = ({
 
 
 
+    const [absMaxInterestPaidTextInputValue, absMaxInterestPaidTextInputValueSetter] = useState(state.config.income.netWorth.toString())
+
+
+    useEffect(() => {
+        state.updateAbsoluteMaxTotalInterestPaid(absMaxInterestPaidTextInputValue == '' ? 0 : parseInt(absMaxInterestPaidTextInputValue))
+    }, [absMaxInterestPaidTextInputValue])
+
+
+
+
     return (
         <>
             <Drawer
@@ -230,8 +240,8 @@ const GraphConfigDrawer = ({
 
                             <TextInput
                                 type='number'
-                                value={state.filters.absoluteMaxTotalInterestPaid}
-                                onChange={(event) => state.updateAbsoluteMaxTotalInterestPaid(parseInt(event.currentTarget.value))}
+                                value={absMaxInterestPaidTextInputValue}
+                                onChange={(event) => absMaxInterestPaidTextInputValueSetter(event.currentTarget.value)}
                                 sx={{
                                     width: '50%'
                                 }}
