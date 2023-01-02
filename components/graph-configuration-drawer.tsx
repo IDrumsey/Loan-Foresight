@@ -64,7 +64,7 @@ const GraphConfigDrawer = ({
 
 
 
-                <ScrollArea sx={{height: "100%"}} scrollbarSize={0}>
+                <ScrollArea sx={{height: "70vh"}} scrollbarSize={0}>
 
                     {
                         configTab == 'graph' && 
@@ -168,7 +168,7 @@ const GraphConfigDrawer = ({
 
                         <Checkbox
                             sx={{
-                                marginBottom: 200
+                                marginBottom: 50
                             }}
                             checked={state.config.graph.showInterestPaidPerInterval}
                             onChange={e => state.updateShowInterestPaidPerInterval(e.target.checked)}
@@ -295,7 +295,7 @@ const GraphConfigDrawer = ({
                             min={0}
                             max={100}
                             sx={{
-                                marginBottom: 200
+                                marginBottom: 50
                             }}
                         />
                         </>
