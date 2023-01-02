@@ -170,11 +170,13 @@ const GraphConfigDrawer = ({
 
                         <Text size="sm" weight={500} style={{marginBottom: 10}}>Years in the future</Text>
                         <Slider
-                        // https://stackoverflow.com/a/15762794/17712310
-                        value={(state.config.graph.numMonthsInFutureToProject / 12).toFixed(2)}
+                        value={(state.config.graph.numMonthsInFutureToProject / 12)}
                         onChange={(newNum) => {
                             state.updateNumMonthsInFutureToProject(newNum * 12)
                         }}
+
+                        // https://stackoverflow.com/a/15762794/17712310
+                        label={(state.config.graph.numMonthsInFutureToProject / 12).toFixed(2)}
                         marks={[
                             {value: 0, label: '0'},
                             {value: 75, label: '75'}
