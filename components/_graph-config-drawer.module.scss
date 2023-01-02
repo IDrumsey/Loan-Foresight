@@ -1,0 +1,16 @@
+.custom-color-line-selector-apply-btn {
+    color: #9e9e9e;
+    cursor: pointer;
+    transition: filter 100ms ease-out;
+}
+
+
+.custom-color-line-selector-apply-btn:hover {
+    filter: brightness(.8);
+}
+
+
+
+.custom-color-line-picker-title {
+    margin: 4px 0;
+}

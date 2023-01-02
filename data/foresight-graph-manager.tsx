@@ -163,6 +163,10 @@ export interface IForesightState {
     updateBreakdownExpensesByType: (breakdownExpensesByType: boolean) => void
     updateCondensedExpensesIntervalLength: (newIntervalLength: expenseIntervalLength) => void
     updateCondensedExpensesPerPeriod: (newExpensesPerPeriod: number) => void
+
+    updateIncomeLineColor: (newIncomeLineColor: string) => void
+    updateExpenseLineColor: (newExpenseLineColor: string) => void
+    updateTotalLoanCostLineColor: (newTotalLoanCostLineColor: string) => void
 }
 
 
@@ -669,6 +673,62 @@ const useForesightState = create<IForesightState>()((set) => ({
                 expenses: {
                     ...state.config.expenses,
                     expensesPerPeriod: newExpensesPerPeriod
+                }
+            }
+        }))
+    },
+
+
+
+    
+    updateIncomeLineColor: (newIncomeLineColor: string) => {
+        set(state => ({
+            ...state,
+            config: {
+                ...state.config,
+                graph: {
+                    ...state.config.graph,
+                    colors: {
+                        ...state.config.graph.colors,
+                        incomeLine: newIncomeLineColor
+                    }
+                }
+            }
+        }))
+    },
+
+
+    updateExpenseLineColor: (newExpenseLineColor: string) => {
+        set(state => ({
+            ...state,
+            config: {
+                ...state.config,
+                graph: {
+                    ...state.config.graph,
+                    colors: {
+                        ...state.config.graph.colors,
+                        expenseLine: newExpenseLineColor
+                    }
+                }
+            }
+        }))
+    },
+
+
+
+
+
+    updateTotalLoanCostLineColor: (newTotalLoanCostLineColor: string) => {
+        set(state => ({
+            ...state,
+            config: {
+                ...state.config,
+                graph: {
+                    ...state.config.graph,
+                    colors: {
+                        ...state.config.graph.colors,
+                        totalLoanCostLine: newTotalLoanCostLineColor
+                    }
                 }
             }
         }))

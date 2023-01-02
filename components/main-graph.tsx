@@ -265,6 +265,9 @@ const ForesightGraph = ({}: Props) => {
       state.config.graph.intervalLength,
       state.config.graph.numMonthsInFutureToProject,
       state.config.graph.showInterestPaidPerInterval,
+      state.config.graph.colors.incomeLine,
+      state.config.graph.colors.expenseLine,
+      state.config.graph.colors.totalLoanCostLine,
     ])
 
 

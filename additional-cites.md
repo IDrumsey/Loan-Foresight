@@ -72,3 +72,7 @@ cleanup -
 - upgrading to Next.js 13
     - https://nextjs.org/docs/upgrading
     - breaking changes - https://nextjs.org/blog/next-13
+
+
+
+- finding and picking a color lib to use - https://blog.shahednasser.com/7-javascript-color-libraries-and-which-should-you-choose/

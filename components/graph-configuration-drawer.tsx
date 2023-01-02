@@ -1,6 +1,11 @@
-import {Drawer, Text, Divider, Radio, Slider, Group, Checkbox, SegmentedControl, TextInput, ScrollArea} from '@mantine/core'
+import {Drawer, Text, Divider, Radio, Slider, Group, Checkbox, SegmentedControl, TextInput, ScrollArea, ColorPicker, ColorSwatch} from '@mantine/core'
 import {useState, useEffect} from 'react'
+import { FaCheckCircle } from 'react-icons/fa'
 import useForesightState, { loanPeriodType } from '../data/foresight-graph-manager'
+
+import styles from '../components/_graph-config-drawer.module.scss'
+
+const Color = require('color')
 
 const GraphConfigDrawer = ({
     isOpen,
@@ -11,6 +16,10 @@ const GraphConfigDrawer = ({
 
 
     const state = useForesightState()
+
+
+
+    const [colorPickerCurrentColor, colorPickerCurrentColorSetter] = useState(state.config.graph.colors.incomeLine)
 
 
 
@@ -31,6 +40,17 @@ const GraphConfigDrawer = ({
     useEffect(() => {
         state.updateAbsoluteMaxTotalInterestPaid(absMaxInterestPaidTextInputValue == '' ? 0 : parseInt(absMaxInterestPaidTextInputValue))
     }, [absMaxInterestPaidTextInputValue])
+
+
+
+
+
+
+    const getCustomColorAsHex = (): string => {
+        // https://github.com/Qix-/color
+        const currColor = new Color(colorPickerCurrentColor)
+        return currColor.hex()
+    }
 
 
 
@@ -176,6 +196,71 @@ const GraphConfigDrawer = ({
                             label="Show interest paid per year"
                             color="blue"
                             labelPosition="right"
+                        />
+
+
+                        {/* color configuration */}
+
+                        <h3 style={{marginBottom: 20}}>Custom Colors</h3>
+
+                        <div style={{display: 'flex', columnGap: 20, alignItems: 'center'}}>
+                            <p className={`${styles['custom-color-line-picker-title']}`}>Income Line</p>
+
+                            {/* https://mantine.dev/core/color-swatch/ */}
+                            <ColorSwatch
+                                key="income-color-swatch"
+                                color={state.config.graph.colors.incomeLine}
+                                size={15}
+                            />
+
+                            <FaCheckCircle
+                                className={`${styles['custom-color-line-selector-apply-btn']}`}
+                                onClick={() => {
+                                    state.updateIncomeLineColor(getCustomColorAsHex())
+                                }}
+                            />
+
+                        </div>
+
+                        <div style={{display: 'flex', columnGap: 20, alignItems: 'center'}}>
+                            <p className={`${styles['custom-color-line-picker-title']}`}>Expense Line</p>
+                            <ColorSwatch
+                                key="expense-color-swatch"
+                                color={state.config.graph.colors.expenseLine}
+                                size={15}
+                            />
+
+                            <FaCheckCircle
+                                className={`${styles['custom-color-line-selector-apply-btn']}`}
+                                onClick={() => {
+                                    state.updateExpenseLineColor(getCustomColorAsHex())
+                                }}
+                            />
+                        </div>
+
+                        <div style={{display: 'flex', columnGap: 20, alignItems: 'center'}}>
+                            <p className={`${styles['custom-color-line-picker-title']}`}>Total Loan Cost Line</p>
+                            <ColorSwatch
+                                key="loan-cost-color-swatch"
+                                color={state.config.graph.colors.totalLoanCostLine}
+                                size={15}
+                            />
+
+                            <FaCheckCircle
+                                className={`${styles['custom-color-line-selector-apply-btn']}`}
+                                onClick={() => {
+                                    state.updateTotalLoanCostLineColor(getCustomColorAsHex())
+                                }}
+                            />
+                        </div>
+
+
+                        {/* https://mantine.dev/core/color-picker/ */}
+                        <ColorPicker
+                            format="rgb"
+                            value={colorPickerCurrentColor}
+                            onChange={colorPickerCurrentColorSetter}
+                            sx={{margin: 'auto', marginTop: 25, marginBottom: 50}}
                         />
                         </>
                     }
