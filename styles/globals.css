@@ -9,6 +9,8 @@ body {
 html {
   /* https://dev.to/einlinuus/fixed-navigations-and-sections-here-is-scroll-padding-25nb */
   scroll-padding-top: 100px;
+
+  scroll-behavior: smooth;
 }
 
 a {

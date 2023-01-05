@@ -27,7 +27,8 @@ const ReleasesPage = () => {
                         }
                     })}
                     // https://mantine.dev/core/select/#data-prop
-                    itemComponent={({value, label}) => <Link href={`/releases#${value}`} style={{
+                    // https://stackoverflow.com/a/74084483/20352568
+                    itemComponent={({value, label}) => <Link href={`/releases#${value}`} scroll={false} style={{
                         padding: '8px 15px'
                     }}>{label}</Link>}
                     // https://mantine.dev/core/select/?t=props
