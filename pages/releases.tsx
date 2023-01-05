@@ -6,6 +6,8 @@ import {format} from 'date-fns'
 
 import releases, {ReleaseSpecs} from '../data/releases'
 
+import Link from 'next/link'
+
 
 const ReleasesPage = () => {
 
@@ -24,6 +26,12 @@ const ReleasesPage = () => {
                             label: buildReleaseTitle(release)
                         }
                     })}
+                    // https://mantine.dev/core/select/#data-prop
+                    itemComponent={({value, label}) => <Link href={`/releases#${value}`} style={{
+                        padding: '8px 15px'
+                    }}>{label}</Link>}
+                    // https://mantine.dev/core/select/?t=props
+                    maxDropdownHeight={200}
                     defaultValue='1.0.0'
                     sx={{
                         marginLeft: 'auto',
@@ -39,7 +47,7 @@ const ReleasesPage = () => {
                     releases.map((release, i) => {
                         return <div className={`${styles['release-details']}`} key={i}>
                             
-                            <div className={`${styles['release-title']}`}>{buildReleaseTitle(release)}</div>
+                            <div id={buildReleaseTitle(release)} className={`${styles['release-title']}`}>{buildReleaseTitle(release)}</div>
 
                             {/* https://date-fns.org/v2.29.3/docs/format */}
                             <div className={`${styles['release-date']}`}>{format(release.releaseDate, "MMMM d, y")}</div>
