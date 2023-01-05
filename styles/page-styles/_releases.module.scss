@@ -78,3 +78,15 @@
     color: #D0679A;
     margin-top: 35px;
 }
+
+
+
+
+// https://css-tricks.com/a-complete-guide-to-css-media-queries/
+@media screen and (max-width: 750px) {
+
+    #releases-wrapper {
+        width: 80%;
+    }
+    
+}
