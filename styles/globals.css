@@ -10,6 +10,7 @@ html {
   /* https://dev.to/einlinuus/fixed-navigations-and-sections-here-is-scroll-padding-25nb */
   scroll-padding-top: 100px;
 
+  /* https://gomakethings.com/how-to-animate-scrolling-to-anchor-links-with-one-line-of-css/ */
   scroll-behavior: smooth;
 }
 
