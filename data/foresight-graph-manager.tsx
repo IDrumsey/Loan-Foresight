@@ -199,7 +199,7 @@ const useForesightState = create<IForesightState>()((set) => ({
         loan: {
             loanAmount: 150000,
             period: 15,
-            interestRate: .07,
+            interestRate: 7,
 
             useRelativeDownPayment: true,
             absoluteDownPayment: 0,
@@ -337,7 +337,7 @@ const useForesightState = create<IForesightState>()((set) => ({
         const loanData = state.datapointDates.map((date, i) => {
             const downpayment = state.config.loan.useRelativeDownPayment ? state.config.loan.relativeDownPayment * state.incomeForecastDatapoints[i].data : state.config.loan.absoluteDownPayment
             const loanAmountMinusDownpayment = state.config.loan.loanAmount - downpayment
-            return getBreakdown(loanAmountMinusDownpayment, state.config.loan.interestRate, state.config.loan.period)
+            return getBreakdown(loanAmountMinusDownpayment, state.config.loan.interestRate / 100, state.config.loan.period)
         })
 
         const loanDatapoints = state.datapointDates.map((date, i) => new ForesightDataPoint<{total: number, interest: number}>(date, {total: loanData[i].total, interest: loanData[i].interestPaid}))
