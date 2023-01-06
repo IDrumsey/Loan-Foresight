@@ -96,6 +96,14 @@ const releases: ReleaseSpecs[] = [
                 videoURLs: [
                     "/release-1.2.0-video-1.mp4"
                 ]
+            },
+
+            {
+                title: "Releases version scroller",
+                desc: "Users can use the dropdown on the releases page to scroll to the specified release.",
+                videoURLs: [
+                    "/release-1.2.0-video-2.mp4"
+                ]
             }
         ],
         bugFixes: []
