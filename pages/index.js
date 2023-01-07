@@ -1,9 +1,7 @@
 import Head from 'next/head'
-import { useEffect, useState, useRef, useCallback } from 'react'
+import { useEffect, useState } from 'react'
 import styles from '../styles/page-styles/home.module.scss'
-import { Button } from '@mantine/core'
 import { useHotkeys } from '@mantine/hooks'
-import { GoSettings } from 'react-icons/go'
 import { IoMdClose } from 'react-icons/io'
 import IncomeForm from '../components/income-form'
 import SalaryIncomeForm from '../components/income-type-forms/salary-income-form'
@@ -14,6 +12,8 @@ import Link from 'next/link'
 import MainGraph from '../components/main-graph'
 
 import useForesightState from '../data/foresight-graph-manager'
+
+import QuickNav from '../components/quick-nav/quick-nav'
 
 
 const minSalaryChange = -10
@@ -135,13 +135,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      {/* button to open the graph configuration drawer */}
-      <Button style={{position: 'absolute', top: 25, right: 25, zIndex: 99}} variant="transparent" size="xl" color="gray"
-        // https://stackoverflow.com/a/59304431/17712310
-        onClick={() => setGraphConfigDrawerOpen(!graphConfigDrawerOpen)}
-      >
-        <GoSettings/>
-      </Button>
+      <QuickNav/>
 
       {/* graph configuration drawer */}
       <GraphConfigDrawer

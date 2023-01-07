@@ -1,0 +1,42 @@
+#quick-nav {
+    position: fixed;
+    top: 50px;
+    right: 25px;
+    z-index: 999;
+    font-size: 24px;
+    padding: 10px 40px;
+    border-radius: 30px;
+    
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+
+
+
+.quick-nav-icon-button {
+    color: rgb(175, 175, 175);
+    transition: color 80ms ease-in;
+}
+
+.quick-nav-icon-button:hover {
+    color: rgb(225, 225, 225);
+    cursor: pointer;
+}
+
+
+
+@media screen and (max-width: 700px) {
+
+    #quick-nav {
+        flex-direction: row;
+        bottom: 25px;
+        left: 50%;
+        transform: translateX(-50%);
+        top: unset;
+        right: unset;
+        background-color: rgb(45, 45, 45, .5);
+    }
+
+}
