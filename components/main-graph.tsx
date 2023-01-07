@@ -1,6 +1,6 @@
 import { Line } from 'react-chartjs-2'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 
 import { calcInterestRange, generateCriteriaMatchBackgroundConfigs } from '../finance-planner'
 import { ForesightDataPoint } from '../data/foresight-graph-manager'
@@ -61,7 +61,7 @@ const ForesightGraph = ({}: Props) => {
 
 
 
-    const generateIncomeDataset = () => {
+    const generateIncomeDataset = useCallback(() => {
   
       return {
         label: 'Income',
@@ -77,11 +77,14 @@ const ForesightGraph = ({}: Props) => {
         // https://www.digitalocean.com/community/tutorials/css-hex-code-colors-alpha-values
         backgroundColor: state.config.graph.colors.incomeLine + '14'
       }
-    }
+    }, [
+      state.config.graph.colors.incomeLine,
+      state.incomeForecastDatapoints
+    ])
 
 
 
-    const generateExpensesDataset = () => {
+    const generateExpensesDataset = useCallback(() => {
   
       return {
         label: 'Expenses',
@@ -92,11 +95,14 @@ const ForesightGraph = ({}: Props) => {
         // https://www.digitalocean.com/community/tutorials/css-hex-code-colors-alpha-values
         backgroundColor: state.config.graph.colors.expenseLine + '14'
       }
-    }
+    }, [
+      state.config.graph.colors.expenseLine,
+      state.expenseForecastDatapoints
+    ])
 
 
 
-    const generateNetDataset = () => {
+    const generateNetDataset = useCallback(() => {
       const netDatapoints = state.incomeForecastDatapoints.map((incomeDatapoint, i) => new ForesightDataPoint<number>(incomeDatapoint.date, incomeDatapoint.data - state.expenseForecastDatapoints[i].data))
 
       return {
@@ -109,10 +115,10 @@ const ForesightGraph = ({}: Props) => {
         // https://www.digitalocean.com/community/tutorials/css-hex-code-colors-alpha-values
         backgroundColor: '#eb8c3414'
       }
-    }
+    }, [state.expenseForecastDatapoints, state.incomeForecastDatapoints])
 
 
-    const generateLoanTotalDataset = () => {
+    const generateLoanTotalDataset = useCallback(() => {
 
       return {
         label: 'Total Loan Cost',
@@ -124,7 +130,10 @@ const ForesightGraph = ({}: Props) => {
         // https://www.digitalocean.com/community/tutorials/css-hex-code-colors-alpha-values
         backgroundColor: state.config.graph.colors.totalLoanCostLine + '14'
       }
-    }
+    }, [
+      state.config.graph.colors.totalLoanCostLine,
+      state.loanForecastDatapoints
+    ])
 
 
 
@@ -146,7 +155,7 @@ const ForesightGraph = ({}: Props) => {
 
 
 
-    const generateInterestPaidPerYearDataset = () => {
+    const generateInterestPaidPerYearDataset = useCallback(() => {
       // calculate avg interest paid per year
 
       return {
@@ -158,12 +167,15 @@ const ForesightGraph = ({}: Props) => {
         // https://www.digitalocean.com/community/tutorials/css-hex-code-colors-alpha-values
         backgroundColor: '#ebf0b914'
       }
-    }
+    }, [
+      state.config.loan.period,
+      state.loanForecastDatapoints
+    ])
 
 
 
 
-    const genDatasets = () => {
+    const genDatasets = useCallback(() => {
       let datasets = []
 
       // XOR - https://stackoverflow.com/a/4540443
@@ -200,7 +212,18 @@ const ForesightGraph = ({}: Props) => {
       }
 
       return data
-    }
+    }, [
+      generateExpensesDataset,
+      generateIncomeDataset,
+      generateInterestPaidPerYearDataset,
+      generateLoanTotalDataset,
+      generateNetDataset,
+      state.config.graph.combineIncomeAndExpenses,
+      state.config.graph.showExpensesLine,
+      state.config.graph.showIncomeLine,
+      state.config.graph.showInterestPaidPerInterval,
+      state.datapointDates
+    ])
 
 
 
@@ -234,14 +257,17 @@ const ForesightGraph = ({}: Props) => {
 
 
 
-    const updateGraph = () => {
+    const updateGraph = useCallback(() => {
       console.log('updating main graph...')
       const datasetsToShow = genDatasets()
       graphDataSetter(datasetsToShow)
 
       // const filteredRanges = generateValidRanges()
       // rangeCriteriaMatchBoxAnnotationsSetter(filteredRanges)
-    }
+    }, [
+      graphDataSetter,
+      genDatasets
+    ])
 
 
 
@@ -249,7 +275,9 @@ const ForesightGraph = ({}: Props) => {
     // initially build the graph
     useEffect(() => {
       updateGraph()
-    }, [])
+    }, [
+      updateGraph
+    ])
 
 
 
@@ -268,6 +296,7 @@ const ForesightGraph = ({}: Props) => {
       state.config.graph.colors.incomeLine,
       state.config.graph.colors.expenseLine,
       state.config.graph.colors.totalLoanCostLine,
+      updateGraph
     ])
 
 

@@ -13,13 +13,16 @@ const IncomeForm = ({
     const state = useForesightState()
 
 
+    const updateNetWorth = useForesightState(state => state.updateNetWorth)
+
+
 
     const [netWorth, netWorthSetter] = useState(state.config.income.netWorth.toString())
 
 
     useEffect(() => {
-        state.updateNetWorth(netWorth == '' ? 0 : parseInt(netWorth))
-    }, [netWorth])
+        updateNetWorth(netWorth == '' ? 0 : parseInt(netWorth))
+    }, [netWorth, updateNetWorth])
 
 
 

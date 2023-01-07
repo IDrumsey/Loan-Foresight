@@ -26,6 +26,12 @@ export default function Home() {
   const state = useForesightState()
 
 
+  const updateIncomeDatapoints = useForesightState(state => state.updateIncomeDatapoints)
+  const updateExpenseDatapoints = useForesightState(state => state.updateExpenseDatapoints)
+  const updateLoanDatapoints = useForesightState(state => state.updateLoanDatapoints)
+  const updateDates = useForesightState(state => state.updateDates)
+
+
 
   /**
    * 
@@ -56,30 +62,34 @@ export default function Home() {
 
   // when income configurations change -> recalculate the income forecast
   useEffect(() => {
-    state.updateDates()
-    state.updateIncomeDatapoints()
+    updateDates()
+    updateIncomeDatapoints()
   }, [
     state.config.income.salary,
     state.config.income.incomeType,
     state.config.income.netWorth,
-    state.config.income.expectedSalaryChangePerYear
+    state.config.income.expectedSalaryChangePerYear,
+    updateDates,
+    updateIncomeDatapoints
   ])
 
 
   // when expense configurations change -> recalculate the expense forecast
   useEffect(() => {
-    state.updateDates()
-    state.updateExpenseDatapoints()
+    updateDates()
+    updateExpenseDatapoints()
   }, [
     state.config.expenses.expensesPerPeriod,
-    state.config.expenses.intervalLength
+    state.config.expenses.intervalLength,
+    updateDates,
+    updateExpenseDatapoints
   ])
 
 
   // when loan configurations change -> recalculate the loan forecast
   useEffect(() => {
-    state.updateDates()
-    state.updateLoanDatapoints()
+    updateDates()
+    updateLoanDatapoints()
   }, [
     state.config.loan.interestRate,
     state.config.loan.loanAmount,
@@ -88,18 +98,24 @@ export default function Home() {
     state.config.loan.absoluteDownPayment,
     state.config.loan.relativeDownPayment,
     state.incomeForecastDatapoints,
-    state.expenseForecastDatapoints
+    state.expenseForecastDatapoints,
+    updateDates,
+    updateLoanDatapoints
   ])
 
 
   useEffect(() => {
-    state.updateDates()
-    state.updateIncomeDatapoints()
-    state.updateExpenseDatapoints()
-    state.updateLoanDatapoints()
+    updateDates()
+    updateIncomeDatapoints()
+    updateExpenseDatapoints()
+    updateLoanDatapoints()
   }, [
     state.config.graph.intervalLength,
-    state.config.graph.numMonthsInFutureToProject
+    state.config.graph.numMonthsInFutureToProject,
+    updateDates,
+    updateIncomeDatapoints,
+    updateExpenseDatapoints,
+    updateLoanDatapoints
   ])
 
 

@@ -83,3 +83,17 @@ cleanup -
 - trim video - https://www.howtogeek.com/839883/how-to-trim-a-video-on-windows-11/#:~:text=Right%2Dclick%20and%20select%20Open,in%20while%20cutting%20the%20rest.
 
 - cropping video - https://windowsreport.com/crop-video-windows-11/
+
+
+- bind components to state with zustand
+    - https://github.com/pmndrs/zustand#then-bind-your-components-and-thats-it
+    - https://docs.pmnd.rs/zustand/recipes/recipes
+
+
+
+- using useCallback to fix build issues with useEffect dependency array
+    - https://reactjs.org/docs/hooks-reference.html#usecallback
+    - https://timmousk.com/blog/react-hook-useeffect-has-a-missing-dependency/#:~:text=Use%20the%20useCallback%20hook%20around%20a%20function%20dependency.
+    - https://tkdodo.eu/blog/hooks-dependencies-and-stale-closures
+    - https://reacttraining.com/blog/when-to-use-functions-in-hooks-dependency-array/
+    - https://stackoverflow.com/questions/55840294/how-to-fix-missing-dependency-warning-when-using-useeffect-react-hook

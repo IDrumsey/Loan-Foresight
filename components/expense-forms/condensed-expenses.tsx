@@ -26,13 +26,15 @@ const CondensedExpenseForm = ({}) => {
 
     const state = useForesightState()
 
+    const updateCondensedExpensesPerPeriod = useForesightState(state => state.updateCondensedExpensesPerPeriod)
+
 
     const [expensePerMonthTextInputValue, expensePerMonthTextInputValueSetter] = useState(state.config.expenses.expensesPerPeriod.toString())
 
 
     useEffect(() => {
-        state.updateCondensedExpensesPerPeriod(expensePerMonthTextInputValue == '' ? 0 : parseInt(expensePerMonthTextInputValue))
-    }, [expensePerMonthTextInputValue])
+        updateCondensedExpensesPerPeriod(expensePerMonthTextInputValue == '' ? 0 : parseInt(expensePerMonthTextInputValue))
+    }, [expensePerMonthTextInputValue, updateCondensedExpensesPerPeriod])
 
 
     return (

@@ -18,6 +18,10 @@ const GraphConfigDrawer = ({
     const state = useForesightState()
 
 
+    const updateLoanAmount = useForesightState(state => state.updateLoanAmount)
+    const updateAbsoluteMaxTotalInterestPaid = useForesightState(state => state.updateAbsoluteMaxTotalInterestPaid)
+
+
 
     const [colorPickerCurrentColor, colorPickerCurrentColorSetter] = useState(state.config.graph.colors.incomeLine)
 
@@ -28,8 +32,8 @@ const GraphConfigDrawer = ({
 
 
     useEffect(() => {
-        state.updateLoanAmount(loanAmountTextInputValue == '' ? 0 : parseInt(loanAmountTextInputValue))
-    }, [loanAmountTextInputValue])
+        updateLoanAmount(loanAmountTextInputValue == '' ? 0 : parseInt(loanAmountTextInputValue))
+    }, [loanAmountTextInputValue, updateLoanAmount])
 
 
 
@@ -38,8 +42,8 @@ const GraphConfigDrawer = ({
 
 
     useEffect(() => {
-        state.updateAbsoluteMaxTotalInterestPaid(absMaxInterestPaidTextInputValue == '' ? 0 : parseInt(absMaxInterestPaidTextInputValue))
-    }, [absMaxInterestPaidTextInputValue])
+        updateAbsoluteMaxTotalInterestPaid(absMaxInterestPaidTextInputValue == '' ? 0 : parseInt(absMaxInterestPaidTextInputValue))
+    }, [absMaxInterestPaidTextInputValue, updateAbsoluteMaxTotalInterestPaid])
 
 
 

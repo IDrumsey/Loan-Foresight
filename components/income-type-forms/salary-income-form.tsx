@@ -11,13 +11,16 @@ const SalaryIncomeForm = ({
     const state = useForesightState()
 
 
+    const updateSalary = useForesightState(state => state.updateSalary)
+
+
 
     const [salaryTextInput, salaryTextInputSetter] = useState(state.config.income.salary.toString())
 
 
     useEffect(() => {
-        state.updateSalary(salaryTextInput == '' ? 0 : parseInt(salaryTextInput))
-    }, [salaryTextInput])
+        updateSalary(salaryTextInput == '' ? 0 : parseInt(salaryTextInput))
+    }, [salaryTextInput, updateSalary])
     
     
     return (
